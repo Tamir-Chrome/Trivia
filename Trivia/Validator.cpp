@@ -4,7 +4,7 @@
 
 using namespace std;
 
-bool isPasswordValid(string pass)
+bool Validator::isPasswordValid(string pass)
 {
 	if (pass.size() < 4)
 		return false;
@@ -29,8 +29,21 @@ bool isPasswordValid(string pass)
 	return true;
 }
 
-bool isUsernameValid(string)
+
+bool Validator::isUsernameValid(string user)
 {
-	return false;
+	if ((int)user[0] < 65 || ((int)user[0]>90 && (int)user[0] < 97) || (int)user[0]>122)
+	{
+		return false;
+	}
+	if (user.find(" ") != -1)
+	{
+		return false;
+	}
+	if (user == "")
+	{
+		return false;
+	}
+	return true;
 }
 

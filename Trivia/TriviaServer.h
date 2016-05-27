@@ -1,3 +1,4 @@
+
 #pragma once
 #include "socketAssist.h"
 #include <map>
@@ -51,3 +52,4 @@ private:
 	//User* getUserBySocket(SOCKET);
 	//Room* getRoomByld(int);
 };
+
