@@ -1,13 +1,60 @@
-﻿Build started 5/26/2016 7:36:31 PM.
-     1>Project "c:\Users\User\documents\visual studio 2013\Projects\Trivia\Trivia\Trivia.vcxproj" on node 2 (Build target(s)).
+﻿Build started 5/26/2016 8:30:15 PM.
+     1>Project "C:\Users\User\Documents\Visual Studio 2013\Projects\Trivia\Trivia\Trivia.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source.cpp
-         Source.cpp
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"c:\users\user\documents\visual studio 2013\Projects\Trivia\Debug\Trivia.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"c:\users\user\documents\visual studio 2013\Projects\Trivia\Debug\Trivia.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"c:\users\user\documents\visual studio 2013\Projects\Trivia\Debug\Trivia.lib" /MACHINE:X86 Debug\Source.obj
-     1>LINK : fatal error LNK1561: entry point must be defined
-     1>Done Building Project "c:\Users\User\documents\visual studio 2013\Projects\Trivia\Trivia\Trivia.vcxproj" (Build target(s)) -- FAILED.
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt TriviaServer.cpp Validator.cpp
+         Validator.cpp
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\validator.cpp(7): error C2059: syntax error : ')'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\validator.cpp(10): error C2039: 'string' : is not a member of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\validator.cpp(11): error C2448: 'isUsernameValid' : function-style initializer appears to be a function definition
+         TriviaServer.cpp
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(17): error C2065: 'User' : undeclared identifier
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(17): error C2059: syntax error : '>'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(17): error C2976: 'std::map' : too few template arguments
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\map(69) : see declaration of 'std::map'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(19): error C2065: 'Room' : undeclared identifier
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(19): error C2059: syntax error : '>'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(19): error C2976: 'std::map' : too few template arguments
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\map(69) : see declaration of 'std::map'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(21): error C2065: 'RecievedMessage' : undeclared identifier
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(21): error C2059: syntax error : '>'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(21): error C2976: 'std::queue' : too few template arguments
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\queue(19) : see declaration of 'std::queue'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(27): error C2061: syntax error : identifier 'RecievedMessage'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(28): error C2143: syntax error : missing ';' before '*'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(28): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(28): error C2061: syntax error : identifier 'RecievedMessage'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(28): warning C4183: 'handleSignin': missing return type; assumed to be a member function returning 'int'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(29): error C2061: syntax error : identifier 'RecievedMessage'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(30): error C2061: syntax error : identifier 'RecievedMessage'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(32): error C2061: syntax error : identifier 'RecievedMessage'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(33): error C2061: syntax error : identifier 'RecievedMessage'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(34): error C2061: syntax error : identifier 'RecievedMessage'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(36): error C2061: syntax error : identifier 'RecievedMessage'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(37): error C2061: syntax error : identifier 'RecievedMessage'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(38): error C2061: syntax error : identifier 'RecievedMessage'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(39): error C2061: syntax error : identifier 'RecievedMessage'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(40): error C2061: syntax error : identifier 'RecievedMessage'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(41): error C2061: syntax error : identifier 'RecievedMessage'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(43): error C2061: syntax error : identifier 'RecievedMessage'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(44): error C2061: syntax error : identifier 'RecievedMessage'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(47): error C2061: syntax error : identifier 'RecievedMessage'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(48): error C2143: syntax error : missing ';' before '*'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(48): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(48): warning C4183: 'buildRecieveMessage': missing return type; assumed to be a member function returning 'int'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(50): error C2143: syntax error : missing ';' before '*'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(50): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(50): warning C4183: 'getUserByName': missing return type; assumed to be a member function returning 'int'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(51): error C2143: syntax error : missing ';' before '*'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(51): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(51): warning C4183: 'getUserBySocket': missing return type; assumed to be a member function returning 'int'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(52): error C2143: syntax error : missing ';' before '*'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(52): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(52): warning C4183: 'getRoomByld': missing return type; assumed to be a member function returning 'int'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.cpp(5): error C2512: 'std::map' : no appropriate default constructor available
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.cpp(5): error C2512: 'std::queue' : no appropriate default constructor available
+         Generating Code...
+     1>Done Building Project "C:\Users\User\Documents\Visual Studio 2013\Projects\Trivia\Trivia\Trivia.vcxproj" (Build target(s)) -- FAILED.
 
 Build FAILED.
 
-Time Elapsed 00:00:09.32
+Time Elapsed 00:00:01.49
