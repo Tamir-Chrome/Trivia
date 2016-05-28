@@ -64,12 +64,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DataBase.cpp" />
     <ClCompile Include="socketAssist.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="TriviaServer.cpp" />
     <ClCompile Include="Validator.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DataBase.h" />
     <ClInclude Include="socketAssist.h" />
     <ClInclude Include="TriviaServer.h" />
     <ClInclude Include="Validator.h" />

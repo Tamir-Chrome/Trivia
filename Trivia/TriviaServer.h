@@ -4,6 +4,8 @@
 #include <map>
 #include <mutex>
 #include <queue>
+#include "DataBase.h"
+ 
 using namespace std;
 
 class TriviaServer
@@ -14,9 +16,10 @@ public:
 	void server();
 
 private:
+
 	//SOCKET _socket;
 	//map<SOCKET, User*> _connectedUsers;
-	////DataBase _db;
+	DataBase _db;
 	//map<int, Room*> _rooms;
 	//mutex _mtxRecievedMessages;
 	//queue<RecievedMessage*> _queRcvMessages;
