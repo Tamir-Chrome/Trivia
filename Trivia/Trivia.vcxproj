@@ -65,15 +65,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DataBase.cpp" />
+    <ClCompile Include="Helper.cpp" />
+    <ClCompile Include="RecievedMessage.cpp" />
     <ClCompile Include="socketAssist.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="TriviaServer.cpp" />
+    <ClCompile Include="User.cpp" />
     <ClCompile Include="Validator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataBase.h" />
+    <ClInclude Include="Helper.h" />
+    <ClInclude Include="RecievedMessage.h" />
     <ClInclude Include="socketAssist.h" />
     <ClInclude Include="TriviaServer.h" />
+    <ClInclude Include="User.h" />
     <ClInclude Include="Validator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

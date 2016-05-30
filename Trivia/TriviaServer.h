@@ -5,6 +5,7 @@
 #include <mutex>
 #include <queue>
 #include "DataBase.h"
+#include "RecievedMessage.h"
  
 using namespace std;
 
@@ -13,7 +14,7 @@ class TriviaServer
 public:
 	TriviaServer();
 	~TriviaServer();
-	void server();
+	void serve();
 
 private:
 
@@ -25,9 +26,10 @@ private:
 	//queue<RecievedMessage*> _queRcvMessages;
 	//static int _roomIdSequence;
 
-	//void bindAndListen();
-	//void accept();
-	//void clientHandler(SOCKET);
+	void bindAndListen();
+	void accept();
+
+	void clientHandler(SOCKET);
 	//void safeDeleteUser(RecievedMessage*);
 	//User* handleSignin(RecievedMessage*);
 	//bool handleSignup(RecievedMessage*);
@@ -37,7 +39,7 @@ private:
 	//void handleStartGame(RecievedMessage*);
 	//void handlePlayerAnswer(RecievedMessage*);
 
-	//bool handleCreateRoom(RecievedMessage*);
+	bool handleCreateRoom(RecievedMessage*);
 	//bool handleCloseRoom(RecievedMessage*);
 	//bool handleJoinRoom(RecievedMessage*);
 	//bool handleLeaveRoom(RecievedMessage*);

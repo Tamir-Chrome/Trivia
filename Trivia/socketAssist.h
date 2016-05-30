@@ -5,9 +5,7 @@
 #include <ws2tcpip.h>
 #include <iostream>
 
-#define PORT "8820"
-#define GOOD 1
-#define BAD 0
+
 
 
 class socketAssist
