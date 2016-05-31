@@ -1,4 +1,4 @@
-//#include "Validator.h"
+#include "Validator.h"
 
 #include <string>
 

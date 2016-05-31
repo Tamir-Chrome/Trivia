@@ -14,17 +14,17 @@ public:
 	void server();
 
 private:
-	//SOCKET _socket;
-	//map<SOCKET, User*> _connectedUsers;
-	////DataBase _db;
-	//map<int, Room*> _rooms;
-	//mutex _mtxRecievedMessages;
-	//queue<RecievedMessage*> _queRcvMessages;
-	//static int _roomIdSequence;
+	SOCKET _socket;
+	map<SOCKET, User*> _connectedUsers;
+	//DataBase _db;
+	map<int, Room*> _rooms;
+	mutex _mtxRecievedMessages;
+	queue<RecievedMessage*> _queRcvMessages;
+	static int _roomIdSequence;
 
 	//void bindAndListen();
 	//void accept();
-	//void clientHandler(SOCKET);
+	void clientHandler(SOCKET);
 	//void safeDeleteUser(RecievedMessage*);
 	//User* handleSignin(RecievedMessage*);
 	//bool handleSignup(RecievedMessage*);
