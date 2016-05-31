@@ -1,4 +1,7 @@
 #include "socketAssist.h"
+#define PORT "8820"
+#define GOOD 1
+#define BAD 0
 
 
 
@@ -17,8 +20,9 @@ void socketAssist::initWinsock()
 	// Initialize Winsock
 	int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
 	if (iResult != 0) {
-		printf("WSAStartup failed with error: %d\n", iResult);
-		exit(1);
+		//printf("WSAStartup failed with error: %d\n", iResult);
+		//exit(1);
+		
 	}
 
 	ZeroMemory(&hints, sizeof(hints));
@@ -30,9 +34,10 @@ void socketAssist::initWinsock()
 	// Resolve the server address and port
 	iResult = getaddrinfo(NULL, PORT, &hints, &result);
 	if (iResult != 0) {
-		printf("getaddrinfo failed with error: %d\n", iResult);
+		//printf("getaddrinfo failed with error: %d\n", iResult);
 		WSACleanup();
-		exit(1);
+
+		//exit(1);
 	}
 }
 

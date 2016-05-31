@@ -1,25 +1,16 @@
-﻿Build started 5/27/2016 3:53:45 PM.
+﻿Build started 5/31/2016 6:09:08 PM.
      1>Project "C:\Users\User\Documents\Visual Studio 2013\Projects\Trivia\Trivia\Trivia.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt TriviaServer.cpp Validator.cpp
-         Validator.cpp
-     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\validator.cpp(17): warning C4018: '<' : signed/unsigned mismatch
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt DataBase.cpp Helper.cpp RecievedMessage.cpp TriviaServer.cpp User.cpp
+         User.cpp
          TriviaServer.cpp
-     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(18): error C2065: 'User' : undeclared identifier
-     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(18): error C2059: syntax error : '>'
-     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(18): error C2976: 'std::map' : too few template arguments
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\map(69) : see declaration of 'std::map'
-     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(20): error C2065: 'Room' : undeclared identifier
-     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(20): error C2059: syntax error : '>'
-     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(20): error C2976: 'std::map' : too few template arguments
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\map(69) : see declaration of 'std::map'
-     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(22): error C2065: 'RecievedMessage' : undeclared identifier
-     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(22): error C2059: syntax error : '>'
-     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.h(22): error C2976: 'std::queue' : too few template arguments
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\queue(19) : see declaration of 'std::queue'
+         RecievedMessage.cpp
+         Helper.cpp
+         DataBase.cpp
          Generating Code...
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.cpp(57): error C4716: 'TriviaServer::handleCreateRoom' : must return a value
      1>Done Building Project "C:\Users\User\Documents\Visual Studio 2013\Projects\Trivia\Trivia\Trivia.vcxproj" (Build target(s)) -- FAILED.
 
 Build FAILED.
 
-Time Elapsed 00:00:02.86
+Time Elapsed 00:00:09.69
