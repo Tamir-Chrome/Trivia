@@ -67,6 +67,7 @@
     <ClCompile Include="DataBase.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="RecievedMessage.cpp" />
+    <ClCompile Include="Room.cpp" />
     <ClCompile Include="socketAssist.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="TriviaServer.cpp" />
@@ -77,6 +78,7 @@
     <ClInclude Include="DataBase.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="RecievedMessage.h" />
+    <ClInclude Include="Room.h" />
     <ClInclude Include="socketAssist.h" />
     <ClInclude Include="TriviaServer.h" />
     <ClInclude Include="User.h" />
