@@ -12,9 +12,9 @@ public:
 	~DataBase();
 
 
-	bool isUserExists(string);
-	bool addNewUser(string, string, string);
-	bool isUserAndPassMatch(string, string);
+	bool isUserExists(string username);
+	bool addNewUser(string name, string pass, string email);
+	bool isUserAndPassMatch(string username, string password);
 	//vector<Question*> initQuestions(int);
 	//vector<string> getBestScores();
 	//vector<string> getPersonalStatus(string);
