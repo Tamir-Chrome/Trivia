@@ -89,9 +89,6 @@ void TriviaServer::handleSignOut(RecievedMessage* msg)
 
 	_connectedUsers.erase(user->getScoket());
 
-	handleCloseRoom(msg);
-	handleLeaveRoom(msg);
-	//handleaveGame(msg);
 
 }
 
@@ -121,11 +118,9 @@ bool TriviaServer::handleCreateRoom(RecievedMessage* msg)
 
 	
 	bool isCreated = user->createRoom(_roomIdSequence, roomName, maxUsers, questionsNo, questionTime);
-	if (!isCreated) //room did
 	if (!isCreated) //room did not create
 		return false;
 
-	_roomIdSequence++;
 
 	
 
