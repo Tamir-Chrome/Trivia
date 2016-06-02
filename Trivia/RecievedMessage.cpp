@@ -1,8 +1,11 @@
 #include "RecievedMessage.h"
 
 
-RecievedMessage::RecievedMessage(SOCKET, int)
+RecievedMessage::RecievedMessage(SOCKET client, int code)
 {
+	_sock = client;
+	_messageCode = code;
+
 }
 
 
