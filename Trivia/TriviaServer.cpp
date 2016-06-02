@@ -92,6 +92,7 @@ void TriviaServer::handleSignOut(RecievedMessage* msg)
 	handleCloseRoom(msg);
 	handleLeaveRoom(msg);
 	//handleaveGame(msg);
+
 }
 
 
@@ -125,6 +126,8 @@ bool TriviaServer::handleCreateRoom(RecievedMessage* msg)
 		return false;
 
 	_roomIdSequence++;
+
+	
 
 	return true; //created room
 }
