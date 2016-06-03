@@ -1,13 +1,16 @@
-﻿Build started 6/3/2016 3:17:28 PM.
+﻿Build started 6/3/2016 5:19:27 PM.
      1>Project "C:\Users\User\Documents\Visual Studio 2013\Projects\Trivia\Trivia\Trivia.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt DataBase.cpp RecievedMessage.cpp Room.cpp TriviaServer.cpp User.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt DataBase.cpp RecievedMessage.cpp Room.cpp Source.cpp TriviaServer.cpp User.cpp
          User.cpp
      1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\user.cpp : error C2471: cannot update program database 'c:\users\user\documents\visual studio 2013\projects\trivia\trivia\debug\vc120.pdb'
      1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\user.cpp : fatal error C1083: Cannot open program database file: 'c:\users\user\documents\visual studio 2013\projects\trivia\trivia\debug\vc120.pdb': No such file or directory
          TriviaServer.cpp
      1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.cpp : error C2471: cannot update program database 'c:\users\user\documents\visual studio 2013\projects\trivia\trivia\debug\vc120.pdb'
      1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.cpp : fatal error C1083: Cannot open program database file: 'c:\users\user\documents\visual studio 2013\projects\trivia\trivia\debug\vc120.pdb': No such file or directory
+         Source.cpp
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\source.cpp : error C2471: cannot update program database 'c:\users\user\documents\visual studio 2013\projects\trivia\trivia\debug\vc120.pdb'
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\source.cpp : fatal error C1083: Cannot open program database file: 'c:\users\user\documents\visual studio 2013\projects\trivia\trivia\debug\vc120.pdb': No such file or directory
          Room.cpp
      1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\room.cpp : error C2471: cannot update program database 'c:\users\user\documents\visual studio 2013\projects\trivia\trivia\debug\vc120.pdb'
      1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\room.cpp : fatal error C1083: Cannot open program database file: 'c:\users\user\documents\visual studio 2013\projects\trivia\trivia\debug\vc120.pdb': No such file or directory
@@ -22,4 +25,4 @@
 
 Build FAILED.
 
-Time Elapsed 00:00:00.32
+Time Elapsed 00:00:00.58

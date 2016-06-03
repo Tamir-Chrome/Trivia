@@ -8,7 +8,7 @@ using namespace std;
 
 void main()
 {
-	TriviaServer test;
+	//TriviaServer test;
 	system("PAUSE");
 	
 }

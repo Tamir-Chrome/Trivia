@@ -121,15 +121,40 @@ RecievedMessage* TriviaServer::buildRecieveMessage(SOCKET client, int code)
 		}
 		v.push_back(email);
 	}
-	if (code == GET_USERS_ROOM)
+	if (code == GET_USERS_ROOM || code == JOIN_ROOM)
 	{
-
+		string roomID="";
+		s = Helper::getStringPartFromSocket(client, 7);
+		for (int i = 3; i < 7; i++)
+		{
+			roomID = roomID + s[i];
+		}
+		v.push_back(roomID);
+	}
+	if (code == CREATE_ROOM)
+	{
+		int numBytesRName=0;
+		string roomName = "";
+		s = Helper::getStringPartFromSocket(client, 5);
+		numBytesRName = 10 * (s[3] - '0') + (s[4] - '0');
+		s = Helper::getStringPartFromSocket(client, 10 + numBytesRName);
+		for (int i = 5; i < 5 + numBytesRName; i++)
+		{
+			roomName = roomName + s[i];
+		}
+		v.push_back(roomName);
+		string playersNumber = to_string(s[5 + numBytesRName]);
+		v.push_back(playersNumber);
+		string questionsNumber = to_string(s[6 + numBytesRName]) + to_string(s[7 + numBytesRName]);
+		v.push_back(questionsNumber);
+		string questionsTimeInSec = to_string(s[8 + numBytesRName]) + to_string(s[9 + numBytesRName]);
+		v.push_back(questionsTimeInSec);
 	}
 	recM = new RecievedMessage(client, code, v);
 	return recM;
 }
 
-void TriviaServer::addRecievedMessage(RecievedMessage*)
+void TriviaServer::addRecievedMessage(RecievedMessage* rec)
 {
 
 }

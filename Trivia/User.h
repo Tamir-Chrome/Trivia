@@ -1,8 +1,10 @@
 #pragma once
 #include "socketAssist.h"
-#include "Room.h"
+
 
 using namespace std;
+
+class Room;
 
 class User
 {

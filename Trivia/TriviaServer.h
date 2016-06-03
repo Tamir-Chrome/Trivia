@@ -11,6 +11,8 @@
  
 using namespace std;
 
+int _roomIdSequence;
+
 class TriviaServer
 {
 public:
@@ -21,7 +23,7 @@ public:
 private:
 
 	map<SOCKET, User*> _connectedUsers;
-	DataBase _db;
+	//DataBase _db;
 	map<int, Room*> _rooms;
 	mutex _mtxRecievedMessages;
 	mutex _mtxRoomId;
