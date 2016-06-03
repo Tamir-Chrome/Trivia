@@ -1,0 +1,10 @@
+#define SIGN_IN 200
+#define SIGN_OUT 201
+#define SIGN_UP 203
+#define GET_ROOMS 205
+#define GET_USERS_ROOM 207
+#define JOIN_ROOM 209
+#define LEAVE_ROOM 211
+#define CREATE_ROOM 213
+#define CLOSE_ROOM 215
+#define EXIT 299

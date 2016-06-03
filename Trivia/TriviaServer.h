@@ -3,14 +3,17 @@
 #include "socketAssist.h"
 #include <map>
 #include <mutex>
+
 #include <queue>
 #include "DataBase.h"
 #include "RecievedMessage.h"
 #include "User.h"
-
+#include "Protocol.h"
 
  
 using namespace std;
+
+int _roomIdSequence;
 
 class TriviaServer
 {
@@ -25,6 +28,7 @@ private:
 	DataBase _db;
 	map<int, Room*> _rooms;
 	mutex _mtxRecievedMessages;
+	mutex _mtxRoomId;
 	queue<RecievedMessage*> _queRcvMessages;
 	static int _roomIdSequence;
 
@@ -52,8 +56,8 @@ private:
 	//void handleGetPersonalStatus(RecievedMessage*);
 
 	//void handleRecievedMessages();
-	//void addRecievedMessage(RecievedMessage*);
-	//RecievedMessage* buildRecieveMessage(SOCKET, int);
+	void addRecievedMessage(RecievedMessage*);
+	RecievedMessage* buildRecieveMessage(SOCKET, int);
 
 	User* getUserByName(string);
 	User* getUserBySocket(SOCKET);
