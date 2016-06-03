@@ -7,8 +7,9 @@ DataBase::DataBase()
 	//open file if not exist
 	t_users.open("t_users.txt");
 	//TODO: add exception if fails
-	t_users.close();
-	cout << "data" << endl;
+	if (t_users.is_open())
+		t_users.close();
+
 
 }
 
@@ -21,6 +22,9 @@ DataBase::~DataBase()
 bool DataBase::isUserExists(string username)
 {
 	t_users.open("t_users.txt");
+	if (t_users.fail())
+		return false;
+
 	t_users.seekg(0); //seek to start
 
 	while (!t_users.eof()) // reads each line from file
@@ -42,6 +46,9 @@ bool DataBase::isUserExists(string username)
 bool DataBase::addNewUser(string name, string pass, string email)
 {
 	t_users.open("t_users.txt");
+	if (t_users.fail())
+		return false;
+	
 	t_users.seekp(0, ios_base::end);
 	t_users << name << " " << pass << " " << email << endl;
 	t_users.close();
@@ -51,6 +58,9 @@ bool DataBase::addNewUser(string name, string pass, string email)
 bool DataBase::isUserAndPassMatch(string username, string password)
 {
 	t_users.open("t_users.txt");
+	if (t_users.fail())
+		return false;
+
 	t_users.seekg(0); //seek to start
 
 	while (!t_users.eof()) // reads each line from file

@@ -2,6 +2,7 @@
 #include <thread>
 #include "Helper.h"
 #include "Room.h"
+#include "Validator.h"
 
 
 int TriviaServer::_roomIdSequence;
@@ -60,7 +61,7 @@ void TriviaServer::clientHandler(SOCKET client)
 {
 	int code = Helper::getMessageTypeCode(client);
 	RecievedMessage* rec;
-	while (code != 0 && code != 299)
+	while (code != 0 && code != EXIT)
 	{
 		rec = buildRecieveMessage(client, code);
 		addRecievedMessage(rec);
@@ -190,7 +191,37 @@ User* TriviaServer::handleSignin(RecievedMessage* msg)
 
 bool TriviaServer::handleSignup(RecievedMessage* msg)
 {
-	return false;
+	string username = msg->getValues()[0];
+	string password = msg->getValues()[1];
+	string email = msg->getValues()[2];
+
+	if (Validator::isPasswordValid(password) == false)
+	{
+		Helper::sendData(msg->getSock(), "1041");
+		return false;
+	}
+
+	if (Validator::isUsernameValid(username) == false)
+	{
+		Helper::sendData(msg->getSock(), "1043");
+		return false;
+	}
+
+	if (_db.isUserExists(username))
+	{
+		Helper::sendData(msg->getSock(), "1042");
+		return false;
+	}
+
+	if (_db.addNewUser(username, password, email) == false)
+	{
+		Helper::sendData(msg->getSock(), "1044");
+		return false;
+	}
+
+
+	Helper::sendData(msg->getSock(), "1040");
+	return true;
 }
 
 void TriviaServer::handleSignOut(RecievedMessage* msg)
