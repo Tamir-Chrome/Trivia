@@ -2,6 +2,10 @@
 #include "TriviaServer.h"
 #include <thread>
 #include "Helper.h"
+#include "Room.h"
+
+
+int TriviaServer::_roomIdSequence;
 
 TriviaServer::TriviaServer()
 {
@@ -52,6 +56,10 @@ void TriviaServer::accept()
 	clientT.detach();
 }
 
+void TriviaServer::clientHandler(SOCKET sock)
+{
+
+}
 
 User* TriviaServer::handleSignin(RecievedMessage* msg)
 {
@@ -78,7 +86,7 @@ User* TriviaServer::handleSignin(RecievedMessage* msg)
 
 bool TriviaServer::handleSignup(RecievedMessage* msg)
 {
-
+	return false;
 }
 
 void TriviaServer::handleSignOut(RecievedMessage* msg)
@@ -89,8 +97,8 @@ void TriviaServer::handleSignOut(RecievedMessage* msg)
 
 	_connectedUsers.erase(user->getScoket());
 
-	handleCloseRoom(msg);
-	handleLeaveRoom(msg);
+	//handleCloseRoom(msg);
+	//handleLeaveRoom(msg);
 	//handleaveGame(msg);
 }
 
@@ -191,6 +199,8 @@ void TriviaServer::handleGetUsersInRoom(RecievedMessage* msg)
 	Helper::sendData(user->getScoket(), usersListMsg);
 }
 
+
+
 void TriviaServer::handleGetRooms(RecievedMessage* msg)
 {
 	User* user = msg->getUser();
@@ -198,21 +208,35 @@ void TriviaServer::handleGetRooms(RecievedMessage* msg)
 		return;
 
 	string sendMsg = "106";
-	char numOfRooms[4] = { 0 };
 
-	sendMsg += itoa(_rooms.size(), numOfRooms, 10); //add number of rooms
+	//add number of rooms
+	string numOfRooms = to_string(_rooms.size());
+
+	for (int i = 0; i < 4 - numOfRooms.size(); i++)//add padding zeros
+		sendMsg += '0';
+
+	sendMsg += numOfRooms; //add number of rooms
 
 	if (_rooms.size()) //if have rooms
 	{
 		for (auto it = _rooms.begin(); it != _rooms.end(); ++it)
 		{
-			char roomId[4] = { 0 };
-			sendMsg += itoa(it->first, roomId, 10); //add room id
+			//add room id
+			string roomId = to_string(it->first);
+			for (int i = 0; i < 4 - roomId.size(); i++)//add padding zeros
+				sendMsg += '0';
+
+			sendMsg += roomId; //add room id
 
 			string roomName = it->second->getName();
 
-			char nameSize[2] = { 0 };
-			sendMsg += itoa(roomName.size(), nameSize, 10); //add name size
+			//add size of the room's name
+			string roomNameSize = to_string(roomName.size());
+			for (int i = 0; i < 2 - roomNameSize.size(); i++)//add padding zeros
+				sendMsg += '0';
+			//add room's name size
+			sendMsg += roomNameSize;
+
 
 			sendMsg += roomName; //add room name
 
@@ -221,3 +245,19 @@ void TriviaServer::handleGetRooms(RecievedMessage* msg)
 
 	Helper::sendData(user->getScoket(), sendMsg);
 }
+
+User* TriviaServer::getUserByName(string)
+{
+	return nullptr;
+}
+
+User* TriviaServer::getUserBySocket(SOCKET)
+{
+	return nullptr;
+}
+
+Room* TriviaServer::getRoomByld(int)
+{
+	return nullptr;
+}
+

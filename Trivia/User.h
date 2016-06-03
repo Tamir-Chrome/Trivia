@@ -1,8 +1,12 @@
 #pragma once
 #include "socketAssist.h"
-#include "Room.h"
 
 using namespace std;
+
+
+class Room;
+
+
 
 class User
 {
@@ -11,7 +15,7 @@ public:
 	~User();
 
 	void send(string);
-	string getUsername();
+	std::string getUsername();
 	SOCKET getScoket();
 	Room* getRoom();
 	//Game* getGame();

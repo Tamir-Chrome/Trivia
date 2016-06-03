@@ -6,6 +6,9 @@
 #include <queue>
 #include "DataBase.h"
 #include "RecievedMessage.h"
+#include "User.h"
+
+
  
 using namespace std;
 
