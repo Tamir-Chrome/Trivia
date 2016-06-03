@@ -171,9 +171,7 @@ void TriviaServer::handleSignOut(RecievedMessage* msg)
 
 	_connectedUsers.erase(user->getScoket());
 
-	handleCloseRoom(msg);
-	handleLeaveRoom(msg);
-	//handleaveGame(msg);
+
 }
 
 
@@ -194,11 +192,19 @@ bool TriviaServer::handleCreateRoom(RecievedMessage* msg)
 	questionsNo = atoi(values[2].c_str());
 	questionTime = atoi(values[3].c_str());
 	
+	
+	unique_lock<mutex> idLock(_mtxRoomId);
+	int roomId = _roomIdSequence;
+	_roomIdSequence++;
+	idLock.unlock();
+
+	
 	bool isCreated = user->createRoom(_roomIdSequence, roomName, maxUsers, questionsNo, questionTime);
-	if (!isCreated) //room did
+	if (!isCreated) //room did not create
 		return false;
 
-	_roomIdSequence++;
+
+	
 
 	return true; //created room
 }

@@ -3,6 +3,7 @@
 #include "socketAssist.h"
 #include <map>
 #include <mutex>
+
 #include <queue>
 #include "DataBase.h"
 #include "RecievedMessage.h"
@@ -23,6 +24,7 @@ private:
 	DataBase _db;
 	map<int, Room*> _rooms;
 	mutex _mtxRecievedMessages;
+	mutex _mtxRoomId;
 	queue<RecievedMessage*> _queRcvMessages;
 	static int _roomIdSequence;
 
