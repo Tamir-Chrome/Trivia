@@ -3,11 +3,13 @@
 #include "socketAssist.h"
 #include <map>
 #include <mutex>
+
 #include <queue>
 #include "DataBase.h"
 #include "RecievedMessage.h"
 #include "User.h"
-
+#include "Protocol.h"
+#include <condition_variable>
 
  
 using namespace std;
@@ -24,7 +26,9 @@ private:
 	map<SOCKET, User*> _connectedUsers;
 	DataBase _db;
 	map<int, Room*> _rooms;
+	condition_variable cv;
 	mutex _mtxRecievedMessages;
+	mutex _mtxRoomId;
 	queue<RecievedMessage*> _queRcvMessages;
 	static int _roomIdSequence;
 
@@ -51,9 +55,9 @@ private:
 	//void handleGetBestScores(RecievedMessage*);
 	//void handleGetPersonalStatus(RecievedMessage*);
 
-	//void handleRecievedMessages();
-	//void addRecievedMessage(RecievedMessage*);
-	//RecievedMessage* buildRecieveMessage(SOCKET, int);
+	void handleRecievedMessages();
+	void addRecievedMessage(RecievedMessage*);
+	RecievedMessage* buildRecieveMessage(SOCKET, int);
 
 	User* getUserByName(string);
 	User* getUserBySocket(SOCKET);

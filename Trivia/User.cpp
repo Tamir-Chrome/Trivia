@@ -3,8 +3,10 @@
 
 User::User(string username, SOCKET sock)
 {
+
 	_username = username;
 	_sock = sock;
+
 }
 
 User::~User()
@@ -18,15 +20,6 @@ void User::send(string)
 
 }
 
-string User::getUsername()
-{
-	return _username;
-}
-
-SOCKET User::getScoket()
-{
-	return _sock;
-}
 
 Room* User::getRoom()
 {
@@ -62,4 +55,14 @@ int User::closeRoom()
 bool User::leaveGame()
 {
 	return false;
+}
+
+string User::getUsername()
+{
+	return _username;
+}
+
+SOCKET User::getScoket()
+{
+	return _sock;
 }

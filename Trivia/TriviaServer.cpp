@@ -1,14 +1,15 @@
-
 #include "TriviaServer.h"
 #include <thread>
 #include "Helper.h"
 #include "Room.h"
+#include "Validator.h"
 
 
 int TriviaServer::_roomIdSequence;
 
 TriviaServer::TriviaServer()
 {
+	TRACE("Starting...");
 	try
 	{
 		socketAssist::initWinsock();
@@ -16,7 +17,7 @@ TriviaServer::TriviaServer()
 	}
 	catch (exception e)
 	{
-		cout << e.what() << endl;
+		TRACE("%s", e.what());
 	}
 	
 }
@@ -24,23 +25,14 @@ TriviaServer::TriviaServer()
 
 TriviaServer::~TriviaServer()
 {
-}
+	//delete connected users
+	_connectedUsers.clear();
 
-void TriviaServer::serve()
-{
-	try
-	{
-		bindAndListen();
-		while (true)
-		{
-			accept();
-		}
-	}
-	catch (exception e)
-	{
-		cout << e.what() << endl;
-	}
+	////delete recevied messages
+	while (!_queRcvMessages.empty()) 
+		_queRcvMessages.pop();
 
+	socketAssist::shutdown();
 }
 
 void TriviaServer::bindAndListen()
@@ -49,17 +41,148 @@ void TriviaServer::bindAndListen()
 	socketAssist::listenClient();
 }
 
+void TriviaServer::serve()
+{
+	try
+	{
+		bindAndListen();
+		TRACE("binded\nlistening (Port = 8820)");
+		thread messageThread(&TriviaServer::handleRecievedMessages, this);
+		while (true)
+		{
+			TRACE("accepting client...")
+			accept();
+		}
+	}
+	catch (exception e)
+	{
+		TRACE("%s", e.what());
+	}
+
+}
+
 void TriviaServer::accept()
 {
 	SOCKET client = socketAssist::acceptClient();	//wait for client
+	TRACE("Client accepted. Client socket = %d", (int)client)
 	thread clientT(&TriviaServer::clientHandler, this, client);	//open new thread for new client
 	clientT.detach();
 }
 
-void TriviaServer::clientHandler(SOCKET sock)
+
+void TriviaServer::clientHandler(SOCKET client)
+{
+	int code = Helper::getMessageTypeCode(client);
+	RecievedMessage* rec;
+	while (code != 0 && code != EXIT)
+	{
+		rec = buildRecieveMessage(client, code);
+		addRecievedMessage(rec);
+		code = Helper::getMessageTypeCode(client);
+	}
+	//make end of connection message
+}
+
+void TriviaServer::handleRecievedMessages()
 {
 
 }
+
+RecievedMessage* TriviaServer::buildRecieveMessage(SOCKET client, int code)
+{
+	int numBytesUser;
+	int numBytesPass;
+	int numBytesEmail;
+	string s;
+	string userName="";
+	string pass="";
+	string email="";
+	vector<string> v;
+	RecievedMessage* recM;
+	if (code == SIGN_IN)
+	{
+		//get username size
+		numBytesUser = Helper::getIntPartFromSocket(client, 2);
+
+		//get username
+		userName = Helper::getStringPartFromSocket(client, numBytesUser);
+		v.push_back(userName);
+
+		//get pass size
+		numBytesPass = Helper::getIntPartFromSocket(client, 2);
+
+		//get pass
+		pass = Helper::getStringPartFromSocket(client, numBytesPass);
+		v.push_back(pass);
+	}
+	else if (code == SIGN_UP)
+	{
+		//get username size
+		numBytesUser = Helper::getIntPartFromSocket(client, 2);
+
+		//get username
+		userName = Helper::getStringPartFromSocket(client, numBytesUser);
+		v.push_back(userName);
+		
+		//get password size
+		numBytesPass = Helper::getIntPartFromSocket(client, 2);
+
+		//get password
+		pass = Helper::getStringPartFromSocket(client, numBytesPass);
+		v.push_back(pass);
+
+		//get email size
+		numBytesEmail = Helper::getIntPartFromSocket(client, 2);
+
+		//get email
+		email = Helper::getStringPartFromSocket(client, numBytesEmail);
+		v.push_back(email);
+	}
+	else if (code == GET_USERS_ROOM || code == JOIN_ROOM)
+	{
+		//get room id
+		string roomID = Helper::getStringPartFromSocket(client, 4);
+		v.push_back(roomID);
+	}
+	else if (code == CREATE_ROOM)
+	{
+		//get roomName size
+		int numBytesRName = Helper::getIntPartFromSocket(client, 2);
+
+		//get room name
+		string roomName = Helper::getStringPartFromSocket(client, numBytesRName);
+		v.push_back(roomName);
+
+		//get max players
+		string playersNumber = Helper::getStringPartFromSocket(client, 1);
+		v.push_back(playersNumber);
+
+		//get number of questions
+		string questionsNumber = Helper::getStringPartFromSocket(client, 2);
+		v.push_back(questionsNumber);
+
+		//get time for question
+		string questionsTimeInSec = Helper::getStringPartFromSocket(client, 2);
+		v.push_back(questionsTimeInSec);
+	}
+	recM = new RecievedMessage(client, code, v);
+	return recM;
+}
+
+void TriviaServer::addRecievedMessage(RecievedMessage* rec)
+{
+	//lock scope
+	{
+		lock_guard<mutex> lock(_mtxRecievedMessages);
+		//locked
+		_queRcvMessages.push(rec);
+		//auto unlocked, out of scope
+	}
+
+	//notify handleRecievedMessage
+	cv.notify_one();
+}
+
 
 User* TriviaServer::handleSignin(RecievedMessage* msg)
 {
@@ -86,7 +209,37 @@ User* TriviaServer::handleSignin(RecievedMessage* msg)
 
 bool TriviaServer::handleSignup(RecievedMessage* msg)
 {
-	return false;
+	string username = msg->getValues()[0];
+	string password = msg->getValues()[1];
+	string email = msg->getValues()[2];
+
+	if (Validator::isPasswordValid(password) == false)
+	{
+		Helper::sendData(msg->getSock(), "1041");
+		return false;
+	}
+
+	if (Validator::isUsernameValid(username) == false)
+	{
+		Helper::sendData(msg->getSock(), "1043");
+		return false;
+	}
+
+	if (_db.isUserExists(username))
+	{
+		Helper::sendData(msg->getSock(), "1042");
+		return false;
+	}
+
+	if (_db.addNewUser(username, password, email) == false)
+	{
+		Helper::sendData(msg->getSock(), "1044");
+		return false;
+	}
+
+
+	Helper::sendData(msg->getSock(), "1040");
+	return true;
 }
 
 void TriviaServer::handleSignOut(RecievedMessage* msg)
@@ -97,9 +250,6 @@ void TriviaServer::handleSignOut(RecievedMessage* msg)
 
 	_connectedUsers.erase(user->getScoket());
 
-	//handleCloseRoom(msg);
-	//handleLeaveRoom(msg);
-	//handleaveGame(msg);
 }
 
 
@@ -120,11 +270,19 @@ bool TriviaServer::handleCreateRoom(RecievedMessage* msg)
 	questionsNo = atoi(values[2].c_str());
 	questionTime = atoi(values[3].c_str());
 	
+	
+	unique_lock<mutex> idLock(_mtxRoomId);
+	int roomId = _roomIdSequence;
+	_roomIdSequence++;
+	idLock.unlock();
+
+	
 	bool isCreated = user->createRoom(_roomIdSequence, roomName, maxUsers, questionsNo, questionTime);
-	if (!isCreated) //room did
+	if (!isCreated) //room did not create
 		return false;
 
-	_roomIdSequence++;
+
+	
 
 	return true; //created room
 }
