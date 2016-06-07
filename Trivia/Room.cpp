@@ -18,7 +18,13 @@ Room::~Room()
 
 bool Room::joinRoom(User* user)
 {
-	return false;
+	bool flag = false;
+	if (_users.size() < _maxUsers)
+	{
+		_users.push_back(user);
+		flag = true;
+	}
+	return flag;
 }
 
 void Room::leaveRoom(User* user)
