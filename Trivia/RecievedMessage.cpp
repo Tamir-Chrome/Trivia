@@ -3,13 +3,13 @@
 
 RecievedMessage::RecievedMessage(SOCKET sock, int code) : _sock(sock), _messageCode(code)
 {
-
+	_user = nullptr;
 }
 
 
 RecievedMessage::RecievedMessage(SOCKET client, int code, vector<string> values) : _sock(client), _messageCode(code), _values(values)
 {
-
+	_user = nullptr;
 }
 
 RecievedMessage::~RecievedMessage()

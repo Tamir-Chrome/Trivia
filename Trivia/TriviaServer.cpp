@@ -2,12 +2,14 @@
 #include <thread>
 #include "Helper.h"
 #include "Room.h"
+#include "Validator.h"
 
 
 int TriviaServer::_roomIdSequence;
 
 TriviaServer::TriviaServer()
 {
+	TRACE("Starting...");
 	try
 	{
 		socketAssist::initWinsock();
@@ -15,7 +17,7 @@ TriviaServer::TriviaServer()
 	}
 	catch (exception e)
 	{
-		cout << e.what() << endl;
+		TRACE("%s", e.what());
 	}
 	
 }
@@ -23,23 +25,14 @@ TriviaServer::TriviaServer()
 
 TriviaServer::~TriviaServer()
 {
-}
+	//delete connected users
+	_connectedUsers.clear();
 
-void TriviaServer::serve()
-{
-	try
-	{
-		bindAndListen();
-		while (true)
-		{
-			accept();
-		}
-	}
-	catch (exception e)
-	{
-		cout << e.what() << endl;
-	}
+	////delete recevied messages
+	while (!_queRcvMessages.empty()) 
+		_queRcvMessages.pop();
 
+	socketAssist::shutdown();
 }
 
 void TriviaServer::bindAndListen()
@@ -48,9 +41,30 @@ void TriviaServer::bindAndListen()
 	socketAssist::listenClient();
 }
 
+void TriviaServer::serve()
+{
+	try
+	{
+		bindAndListen();
+		TRACE("binded\nlistening (Port = 8820)");
+		thread messageThread(&TriviaServer::handleRecievedMessages, this);
+		while (true)
+		{
+			TRACE("accepting client...")
+			accept();
+		}
+	}
+	catch (exception e)
+	{
+		TRACE("%s", e.what());
+	}
+
+}
+
 void TriviaServer::accept()
 {
 	SOCKET client = socketAssist::acceptClient();	//wait for client
+	TRACE("Client accepted. Client socket = %d", (int)client)
 	thread clientT(&TriviaServer::clientHandler, this, client);	//open new thread for new client
 	clientT.detach();
 }
@@ -60,13 +74,18 @@ void TriviaServer::clientHandler(SOCKET client)
 {
 	int code = Helper::getMessageTypeCode(client);
 	RecievedMessage* rec;
-	while (code != 0 && code != 299)
+	while (code != 0 && code != EXIT)
 	{
 		rec = buildRecieveMessage(client, code);
 		addRecievedMessage(rec);
 		code = Helper::getMessageTypeCode(client);
 	}
 	//make end of connection message
+}
+
+void TriviaServer::handleRecievedMessages()
+{
+
 }
 
 RecievedMessage* TriviaServer::buildRecieveMessage(SOCKET client, int code)
@@ -82,77 +101,68 @@ RecievedMessage* TriviaServer::buildRecieveMessage(SOCKET client, int code)
 	RecievedMessage* recM;
 	if (code == SIGN_IN)
 	{
-		s = Helper::getStringPartFromSocket(client, 5);
-		numBytesUser = 10 * (s[3] - '0') + (s[4] - '0');
-		s = Helper::getStringPartFromSocket(client, 5 + numBytesUser);
-		for (int i = 5; i < 5 + numBytesUser; i++)
-		{
-			userName = userName + s[i];
-		}
+		//get username size
+		numBytesUser = Helper::getIntPartFromSocket(client, 2);
+
+		//get username
+		userName = Helper::getStringPartFromSocket(client, numBytesUser);
 		v.push_back(userName);
-		s = Helper::getStringPartFromSocket(client, 7+numBytesUser);
-		numBytesPass = 10 * (s[numBytesUser + 5] - '0') + (s[numBytesUser + 6] - '0');
-		s = Helper::getStringPartFromSocket(client, 7 + numBytesUser + numBytesPass);
-		for (int i = 7 + numBytesUser; i < 7 + numBytesUser + numBytesPass; i++)
-		{
-			pass = pass + s[i];
-		}
+
+		//get pass size
+		numBytesPass = Helper::getIntPartFromSocket(client, 2);
+
+		//get pass
+		pass = Helper::getStringPartFromSocket(client, numBytesPass);
 		v.push_back(pass);
 	}
-	if (code == SIGN_UP)
+	else if (code == SIGN_UP)
 	{
-		s = Helper::getStringPartFromSocket(client, 5);
-		numBytesUser = 10 * (s[3] - '0') + (s[4] - '0');
-		s = Helper::getStringPartFromSocket(client, 5 + numBytesUser);
-		for (int i = 5; i < 5 + numBytesUser; i++)
-		{
-			userName = userName + s[i];
-		}
+		//get username size
+		numBytesUser = Helper::getIntPartFromSocket(client, 2);
+
+		//get username
+		userName = Helper::getStringPartFromSocket(client, numBytesUser);
 		v.push_back(userName);
-		s = Helper::getStringPartFromSocket(client, 7 + numBytesUser);
-		numBytesPass = 10 * (s[numBytesUser + 5] - '0') + (s[numBytesUser + 6] - '0');
-		s = Helper::getStringPartFromSocket(client, 7 + numBytesUser + numBytesPass);
-		for (int i = 7 + numBytesUser; i < 7 + numBytesUser + numBytesPass; i++)
-		{
-			pass = pass + s[i];
-		}
+		
+		//get password size
+		numBytesPass = Helper::getIntPartFromSocket(client, 2);
+
+		//get password
+		pass = Helper::getStringPartFromSocket(client, numBytesPass);
 		v.push_back(pass);
-		s = Helper::getStringPartFromSocket(client, 9 + numBytesUser + numBytesPass);
-		numBytesEmail = 10 * (s[numBytesUser + numBytesPass + 7] - '0') + (s[numBytesUser + numBytesPass + 8] - '0');
-		s = Helper::getStringPartFromSocket(client, 9 + numBytesUser + numBytesPass + numBytesEmail);
-		for (int i = 9 + numBytesUser + numBytesPass; i < 9 + numBytesUser + numBytesPass + numBytesEmail; i++)
-		{
-			email = email + s[i];
-		}
+
+		//get email size
+		numBytesEmail = Helper::getIntPartFromSocket(client, 2);
+
+		//get email
+		email = Helper::getStringPartFromSocket(client, numBytesEmail);
 		v.push_back(email);
 	}
-	if (code == GET_USERS_ROOM || code == JOIN_ROOM)
+	else if (code == GET_USERS_ROOM || code == JOIN_ROOM)
 	{
-		string roomID="";
-		s = Helper::getStringPartFromSocket(client, 7);
-		for (int i = 3; i < 7; i++)
-		{
-			roomID = roomID + s[i];
-		}
+		//get room id
+		string roomID = Helper::getStringPartFromSocket(client, 4);
 		v.push_back(roomID);
 	}
-	if (code == CREATE_ROOM)
+	else if (code == CREATE_ROOM)
 	{
-		int numBytesRName=0;
-		string roomName = "";
-		s = Helper::getStringPartFromSocket(client, 5);
-		numBytesRName = 10 * (s[3] - '0') + (s[4] - '0');
-		s = Helper::getStringPartFromSocket(client, 10 + numBytesRName);
-		for (int i = 5; i < 5 + numBytesRName; i++)
-		{
-			roomName = roomName + s[i];
-		}
+		//get roomName size
+		int numBytesRName = Helper::getIntPartFromSocket(client, 2);
+
+		//get room name
+		string roomName = Helper::getStringPartFromSocket(client, numBytesRName);
 		v.push_back(roomName);
-		string playersNumber = to_string(s[5 + numBytesRName]);
+
+		//get max players
+		string playersNumber = Helper::getStringPartFromSocket(client, 1);
 		v.push_back(playersNumber);
-		string questionsNumber = to_string(s[6 + numBytesRName]) + to_string(s[7 + numBytesRName]);
+
+		//get number of questions
+		string questionsNumber = Helper::getStringPartFromSocket(client, 2);
 		v.push_back(questionsNumber);
-		string questionsTimeInSec = to_string(s[8 + numBytesRName]) + to_string(s[9 + numBytesRName]);
+
+		//get time for question
+		string questionsTimeInSec = Helper::getStringPartFromSocket(client, 2);
 		v.push_back(questionsTimeInSec);
 	}
 	recM = new RecievedMessage(client, code, v);
@@ -161,7 +171,16 @@ RecievedMessage* TriviaServer::buildRecieveMessage(SOCKET client, int code)
 
 void TriviaServer::addRecievedMessage(RecievedMessage* rec)
 {
+	//lock scope
+	{
+		lock_guard<mutex> lock(_mtxRecievedMessages);
+		//locked
+		_queRcvMessages.push(rec);
+		//auto unlocked, out of scope
+	}
 
+	//notify handleRecievedMessage
+	cv.notify_one();
 }
 
 
@@ -190,7 +209,37 @@ User* TriviaServer::handleSignin(RecievedMessage* msg)
 
 bool TriviaServer::handleSignup(RecievedMessage* msg)
 {
-	return false;
+	string username = msg->getValues()[0];
+	string password = msg->getValues()[1];
+	string email = msg->getValues()[2];
+
+	if (Validator::isPasswordValid(password) == false)
+	{
+		Helper::sendData(msg->getSock(), "1041");
+		return false;
+	}
+
+	if (Validator::isUsernameValid(username) == false)
+	{
+		Helper::sendData(msg->getSock(), "1043");
+		return false;
+	}
+
+	if (_db.isUserExists(username))
+	{
+		Helper::sendData(msg->getSock(), "1042");
+		return false;
+	}
+
+	if (_db.addNewUser(username, password, email) == false)
+	{
+		Helper::sendData(msg->getSock(), "1044");
+		return false;
+	}
+
+
+	Helper::sendData(msg->getSock(), "1040");
+	return true;
 }
 
 void TriviaServer::handleSignOut(RecievedMessage* msg)

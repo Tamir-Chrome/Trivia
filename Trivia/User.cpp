@@ -5,8 +5,8 @@ User::User(string username, SOCKET sock)
 {
 
 	_username = username;
-
 	_sock = sock;
+
 }
 
 User::~User()
