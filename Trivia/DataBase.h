@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include "sqlite3.h"
 
 using namespace std;
 
@@ -25,6 +26,7 @@ public:
 private:
 	//TODO: add db callbacks functions
 	fstream t_users;
+	sqlite3* _db;
 
 };
 
