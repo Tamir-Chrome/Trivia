@@ -5,23 +5,27 @@ DataBase::DataBase()
 {
 	//db replacer
 	//open file if not exist
-	t_users.open("t_users.txt");
+	t_users.open("t_users.txt", fstream::out);
 	//TODO: add exception if fails
 	if (t_users.is_open())
 		t_users.close();
-
-
+	else
+	{
+		cout << "file is stupid" << endl;
+		system("pause");
+		exit(1);
+	}
 }
 
 
 DataBase::~DataBase()
 {
-	
+
 }
 
 bool DataBase::isUserExists(string username)
 {
-	t_users.open("t_users.txt");
+	t_users.open("t_users.txt", fstream::in);
 	if (t_users.fail())
 		return false;
 
@@ -45,7 +49,7 @@ bool DataBase::isUserExists(string username)
 
 bool DataBase::addNewUser(string name, string pass, string email)
 {
-	t_users.open("t_users.txt");
+	t_users.open("t_users.txt", fstream::out);
 	if (t_users.fail())
 		return false;
 	
@@ -57,7 +61,7 @@ bool DataBase::addNewUser(string name, string pass, string email)
 
 bool DataBase::isUserAndPassMatch(string username, string password)
 {
-	t_users.open("t_users.txt");
+	t_users.open("t_users.txt", fstream::in);
 	if (t_users.fail())
 		return false;
 
