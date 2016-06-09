@@ -1,14 +1,20 @@
 #include "Game.h"
 
 
-Game::Game(const vector<User*>& players, int questionsNo, DataBase& db)
+Game::Game(const vector<User*>& players, int questionsNo, DataBase& db) : _db(db)
 {
-	
+	_questions_no = questionsNo;
+	_players = players;
 }
 
 Game::~Game()
 {
-
+	/*
+	for (int i = 0; i < _questions.size(); i++)
+	{
+		_questions[i]
+	}
+	*/
 }
 
 void Game::sendFirstQuestion()

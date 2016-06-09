@@ -1,12 +1,14 @@
 #pragma once
 #include "socketAssist.h"
+#include "Helper.h"
+
 
 
 
 using namespace std;
 
 class Room;
-
+class Game;
 
 class User
 {
@@ -19,7 +21,7 @@ public:
 	SOCKET getScoket();
 	Room* getRoom();
 	//Game* getGame();
-	//void setGame(Game*);
+	void setGame(Game*);
 	void clearRoom();
 	bool createRoom(int roomId, string roomName, int maxUsers, int questionsNo, int questionTime);
 	bool joinRoom(Room*);
@@ -30,7 +32,7 @@ public:
 private:
 	string _username;
 	Room* _currRoom;
-	//Game* _currGame;
+	Game* _currGame;
 	SOCKET _sock;
 };
 

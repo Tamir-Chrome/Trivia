@@ -2,6 +2,7 @@
 #include "User.h"
 #include <vector>
 #include "DataBase.h"
+#include <map>
 class Game
 {
 public:
@@ -23,5 +24,8 @@ private:
 	vector<User*> _players;
 	int _questions_no;
 	int _currQuestionIndex;
+	DataBase& _db;
+	map<string, int> _results;
+	int _currentTurnAnswers;
 };
 
