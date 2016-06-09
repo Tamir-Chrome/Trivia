@@ -16,7 +16,7 @@ DataBase::DataBase()
 
 DataBase::~DataBase()
 {
-	
+	t_users.close();
 }
 
 bool DataBase::isUserExists(string username)
