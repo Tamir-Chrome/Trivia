@@ -370,9 +370,6 @@ void TriviaServer::handleGetRooms(RecievedMessage* msg)
 	//add number of rooms
 	string numOfRooms = to_string(_rooms.size());
 
-	for (int i = 0; i < 4 - numOfRooms.size(); i++)//add padding zeros
-		sendMsg += '0';
-
 	sendMsg += numOfRooms; //add number of rooms
 
 	if (_rooms.size()) //if have rooms
@@ -381,8 +378,6 @@ void TriviaServer::handleGetRooms(RecievedMessage* msg)
 		{
 			//add room id
 			string roomId = to_string(it->first);
-			for (int i = 0; i < 4 - roomId.size(); i++)//add padding zeros
-				sendMsg += '0';
 
 			sendMsg += roomId; //add room id
 
@@ -390,8 +385,10 @@ void TriviaServer::handleGetRooms(RecievedMessage* msg)
 
 			//add size of the room's name
 			string roomNameSize = to_string(roomName.size());
-			for (int i = 0; i < 2 - roomNameSize.size(); i++)//add padding zeros
+			
+			if (roomName.size() < 10)
 				sendMsg += '0';
+
 			//add room's name size
 			sendMsg += roomNameSize;
 
