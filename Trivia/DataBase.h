@@ -26,7 +26,7 @@ public:
 	
 private:
 	//TODO: add db callbacks functions
-	fstream t_users;
+
 	sqlite3* _db;
 
 };

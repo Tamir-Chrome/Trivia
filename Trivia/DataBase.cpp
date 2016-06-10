@@ -15,7 +15,7 @@ void sqliteErr(char *zErrMsg)
 
 DataBase::DataBase()
 {
-	int rc;
+		int rc;
 	char *zErrMsg = 0;
 
 
@@ -30,50 +30,7 @@ DataBase::DataBase()
 		exit(1);
 	}
 
-	/*
-	rc = sqlite3_exec(_db, "CREATE TABLE t_users(username TEXT primary key not null, password TEXT not null, email TEXT not null)", NULL, 0, &zErrMsg);
-	if (rc != SQLITE_OK)
-		sqliteErr(zErrMsg);
-	*/
-
-	/* 
-
-		CREATE TABLE `t_users` (
-		`username`	TEXT NOT NULL,
-		`password`	TEXT NOT NULL,
-		`email`	TEXT NOT NULL,
-		PRIMARY KEY(username)
-		);
-
-		CREATE TABLE `t_games` (
-		`game_id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-		`status`	INTEGER NOT NULL,
-		`start_time`	DATETIME NOT NULL,
-		`end_time`	DATETIME
-		);
-
-		CREATE TABLE `t_questions` (
-		`question_id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-		`question`	TEXT NOT NULL,
-		`correct_ans`	TEXT NOT NULL,
-		`ans2`	TEXT NOT NULL,
-		`ans3`	TEXT NOT NULL,
-		`ans4`	TEXT NOT NULL
-		);
-
-		CREATE TABLE `t_players_answers` (
-		`game_id`	INTEGER NOT NULL,
-		`username`	TEXT NOT NULL,
-		`question_id`	INTEGER NOT NULL,
-		`player_answer`	TEXT NOT NULL,
-		`is_correct`	INTEGER NOT NULL,
-		`answer_time`	INTEGER NOT NULL,
-		PRIMARY KEY(game_id,username,question_id)
-		);
-	*/
-
 }
-
 
 DataBase::~DataBase()
 {
@@ -85,8 +42,8 @@ int getResults(void* notUsed, int argc, char** argv, char** azCol)
 	for (int i = 0; i < argc; i++)
 		results.push_back(argv[i]);
 	
-	
 	return 0;
+
 }
 
 bool DataBase::isUserExists(string username)
@@ -118,7 +75,6 @@ bool DataBase::addNewUser(string name, string pass, string email)
 	int rc;
 	char *zErrMsg = 0;
 	stringstream s;
-
 
 	s << "insert into t_users (username, password, email) values( '" << name << "', '" << pass << "', '" << email << "')";
 
@@ -170,20 +126,20 @@ vector<string> DataBase::getBestScores()
 
 vector<string> DataBase::getPersonalStatus(string)
 {
-
+	
 }
 
 int DataBase::insertNewGame()
 {
-
+	return 0;
 }
 
 bool DataBase::updateGameStatus(int)
 {
-
+	return false;
 }
 
 bool DataBase::addAnswerToPIayer(int, string, int, string, bool, int)
 {
-
+	return false;
 }
