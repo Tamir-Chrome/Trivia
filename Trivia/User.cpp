@@ -1,4 +1,5 @@
 #include "User.h"
+#include "Room.h"
 
 
 User::User(string username, SOCKET sock)
@@ -40,9 +41,13 @@ void User::clearRoom()
 bool User::createRoom(int roomId, string roomName, int maxUsers, int questionsNo, int questionTime)
 {
 	return false;
-	/*
+	if (_currRoom != NULL)
+	{
+		if (_currRoom->getId()==roomId)
+		{
 
-	*/
+		}
+	}
 }
 
 bool User::joinRoom(Room*)
