@@ -1,80 +1,189 @@
 #include "DataBase.h"
+#include <sstream>
+#include <vector>
+#include "Helper.h"
+
+vector<string> results;
+
+void sqliteErr(char *zErrMsg)
+{
+	TRACE("SQL error: %s", zErrMsg);
+	sqlite3_free(zErrMsg);
+	system("Pause");
+}
 
 
 DataBase::DataBase()
 {
-	//db replacer
-	//open file if not exist
-	t_users.open("t_users.txt");
-	//TODO: add exception if fails
-	if (t_users.is_open())
-		t_users.close();
+	int rc;
+	char *zErrMsg = 0;
 
+
+	// connection to the database
+	rc = sqlite3_open("trivia.db", &_db);
+
+	if (rc)
+	{
+		cout << "Can't open database: " << sqlite3_errmsg(_db) << endl;
+		sqlite3_close(_db);
+		system("Pause");
+		exit(1);
+	}
+
+	/*
+	rc = sqlite3_exec(_db, "CREATE TABLE t_users(username TEXT primary key not null, password TEXT not null, email TEXT not null)", NULL, 0, &zErrMsg);
+	if (rc != SQLITE_OK)
+		sqliteErr(zErrMsg);
+	*/
+
+	/* 
+
+		CREATE TABLE `t_users` (
+		`username`	TEXT NOT NULL,
+		`password`	TEXT NOT NULL,
+		`email`	TEXT NOT NULL,
+		PRIMARY KEY(username)
+		);
+
+		CREATE TABLE `t_games` (
+		`game_id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+		`status`	INTEGER NOT NULL,
+		`start_time`	DATETIME NOT NULL,
+		`end_time`	DATETIME
+		);
+
+		CREATE TABLE `t_questions` (
+		`question_id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+		`question`	TEXT NOT NULL,
+		`correct_ans`	TEXT NOT NULL,
+		`ans2`	TEXT NOT NULL,
+		`ans3`	TEXT NOT NULL,
+		`ans4`	TEXT NOT NULL
+		);
+
+		CREATE TABLE `t_players_answers` (
+		`game_id`	INTEGER NOT NULL,
+		`username`	TEXT NOT NULL,
+		`question_id`	INTEGER NOT NULL,
+		`player_answer`	TEXT NOT NULL,
+		`is_correct`	INTEGER NOT NULL,
+		`answer_time`	INTEGER NOT NULL,
+		PRIMARY KEY(game_id,username,question_id)
+		);
+	*/
 
 }
 
 
 DataBase::~DataBase()
 {
+	sqlite3_close(_db);
+}
+
+int getResults(void* notUsed, int argc, char** argv, char** azCol)
+{
+	for (int i = 0; i < argc; i++)
+		results.push_back(argv[i]);
 	
+	
+	return 0;
 }
 
 bool DataBase::isUserExists(string username)
 {
-	t_users.open("t_users.txt");
-	if (t_users.fail())
-		return false;
+	int rc;
+	char *zErrMsg = 0;
+	stringstream s;
 
-	t_users.seekg(0); //seek to start
+	s << "select * from t_users where username == '" << username << "'";
 
-	while (!t_users.eof()) // reads each line from file
+	rc = sqlite3_exec(_db, s.str().c_str(), getResults, 0, &zErrMsg);
+	if (rc != SQLITE_OK)
+		sqliteErr(zErrMsg);
+	
+	
+	if (results.size() == 0) //no results
 	{
-		string name, pass, email;
-		t_users >> name >> pass >> email;
-		if (name == username)
-		{
-			//user found
-			t_users.close();
-			return true;
-		}
+		results.clear();
+		return false;
 	}
-	t_users.close();
-	//user found
-	return false;
+
+	//else
+	results.clear();
+	return true;
 }
 
 bool DataBase::addNewUser(string name, string pass, string email)
 {
-	t_users.open("t_users.txt");
-	if (t_users.fail())
+	int rc;
+	char *zErrMsg = 0;
+	stringstream s;
+
+
+	s << "insert into t_users (username, password, email) values( '" << name << "', '" << pass << "', '" << email << "')";
+
+	rc = sqlite3_exec(_db, s.str().c_str(), NULL, 0, &zErrMsg);
+
+	if (rc != SQLITE_OK) //error
+	{
+		sqliteErr(zErrMsg);
 		return false;
-	
-	t_users.seekp(0, ios_base::end);
-	t_users << name << " " << pass << " " << email << endl;
-	t_users.close();
+	}
+
+	//else
 	return true;
 }
 
 bool DataBase::isUserAndPassMatch(string username, string password)
 {
-	t_users.open("t_users.txt");
-	if (t_users.fail())
-		return false;
+	int rc;
+	char *zErrMsg = 0;
+	stringstream s;
 
-	t_users.seekg(0); //seek to start
+	s << "select * from t_users where username == '" << username << "' and password == '" << password << "'";
 
-	while (!t_users.eof()) // reads each line from file
+	rc = sqlite3_exec(_db, s.str().c_str(), getResults, 0, &zErrMsg);
+	if (rc != SQLITE_OK)
+		sqliteErr(zErrMsg);
+	
+
+	if (results.size() != 0) //have results
 	{
-		string name, pass, email;
-		t_users >> name >> pass >> email;
-		if (name == username && pass == password)
-		{
-			//match
-			t_users.close();
-			return true;
-		}
+		results.clear();
+		return true;
 	}
-	t_users.close();
-	//no match
+
+	//else, no match
+	results.clear();
 	return false;
+}
+
+vector<Question*> DataBase::initQuestions(int questionsNo)
+{
+	vector<Question*> questions;
+}
+
+vector<string> DataBase::getBestScores()
+{
+
+}
+
+vector<string> DataBase::getPersonalStatus(string)
+{
+
+}
+
+int DataBase::insertNewGame()
+{
+
+}
+
+bool DataBase::updateGameStatus(int)
+{
+
+}
+
+bool DataBase::addAnswerToPIayer(int, string, int, string, bool, int)
+{
+
 }
