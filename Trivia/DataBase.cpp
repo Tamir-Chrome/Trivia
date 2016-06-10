@@ -1,84 +1,145 @@
 #include "DataBase.h"
+#include <sstream>
+#include <vector>
+#include "Helper.h"
+
+vector<string> results;
+
+void sqliteErr(char *zErrMsg)
+{
+	TRACE("SQL error: %s", zErrMsg);
+	sqlite3_free(zErrMsg);
+	system("Pause");
+}
 
 
 DataBase::DataBase()
 {
-	//db replacer
-	//open file if not exist
-	t_users.open("t_users.txt", fstream::out);
-	//TODO: add exception if fails
-	if (t_users.is_open())
-		t_users.close();
-	else
+		int rc;
+	char *zErrMsg = 0;
+
+
+	// connection to the database
+	rc = sqlite3_open("trivia.db", &_db);
+
+	if (rc)
 	{
-		cout << "file is stupid" << endl;
-		system("pause");
+		cout << "Can't open database: " << sqlite3_errmsg(_db) << endl;
+		sqlite3_close(_db);
+		system("Pause");
 		exit(1);
 	}
-}
 
+}
 
 DataBase::~DataBase()
 {
+	sqlite3_close(_db);
+}
+
+int getResults(void* notUsed, int argc, char** argv, char** azCol)
+{
+	for (int i = 0; i < argc; i++)
+		results.push_back(argv[i]);
+	
+	return 0;
 
 }
 
 bool DataBase::isUserExists(string username)
 {
-	t_users.open("t_users.txt", fstream::in);
-	if (t_users.fail())
-		return false;
+	int rc;
+	char *zErrMsg = 0;
+	stringstream s;
 
-	t_users.seekg(0); //seek to start
+	s << "select * from t_users where username == '" << username << "'";
 
-	while (!t_users.eof()) // reads each line from file
+	rc = sqlite3_exec(_db, s.str().c_str(), getResults, 0, &zErrMsg);
+	if (rc != SQLITE_OK)
+		sqliteErr(zErrMsg);
+	
+	
+	if (results.size() == 0) //no results
 	{
-		string name, pass, email;
-		t_users >> name >> pass >> email;
-		if (name == username)
-		{
-			//user found
-			t_users.close();
-			return true;
-		}
+		results.clear();
+		return false;
 	}
-	t_users.close();
-	//user found
-	return false;
+
+	//else
+	results.clear();
+	return true;
 }
 
 bool DataBase::addNewUser(string name, string pass, string email)
 {
-	t_users.open("t_users.txt", fstream::out);
-	if (t_users.fail())
+	int rc;
+	char *zErrMsg = 0;
+	stringstream s;
+
+	s << "insert into t_users (username, password, email) values( '" << name << "', '" << pass << "', '" << email << "')";
+
+	rc = sqlite3_exec(_db, s.str().c_str(), NULL, 0, &zErrMsg);
+
+	if (rc != SQLITE_OK) //error
+	{
+		sqliteErr(zErrMsg);
 		return false;
-	
-	t_users.seekp(0, ios_base::end);
-	t_users << name << " " << pass << " " << email << endl;
-	t_users.close();
+	}
+
+	//else
 	return true;
 }
 
 bool DataBase::isUserAndPassMatch(string username, string password)
 {
-	t_users.open("t_users.txt", fstream::in);
-	if (t_users.fail())
-		return false;
+	int rc;
+	char *zErrMsg = 0;
+	stringstream s;
 
-	t_users.seekg(0); //seek to start
+	s << "select * from t_users where username == '" << username << "' and password == '" << password << "'";
 
-	while (!t_users.eof()) // reads each line from file
+	rc = sqlite3_exec(_db, s.str().c_str(), getResults, 0, &zErrMsg);
+	if (rc != SQLITE_OK)
+		sqliteErr(zErrMsg);
+	
+
+	if (results.size() != 0) //have results
 	{
-		string name, pass, email;
-		t_users >> name >> pass >> email;
-		if (name == username && pass == password)
-		{
-			//match
-			t_users.close();
-			return true;
-		}
+		results.clear();
+		return true;
 	}
-	t_users.close();
-	//no match
+
+	//else, no match
+	results.clear();
+	return false;
+}
+
+vector<Question*> DataBase::initQuestions(int questionsNo)
+{
+	vector<Question*> questions;
+}
+
+vector<string> DataBase::getBestScores()
+{
+
+}
+
+vector<string> DataBase::getPersonalStatus(string)
+{
+	
+}
+
+int DataBase::insertNewGame()
+{
+	return 0;
+}
+
+bool DataBase::updateGameStatus(int)
+{
+	return false;
+}
+
+bool DataBase::addAnswerToPIayer(int, string, int, string, bool, int)
+{
 	return false;
 }

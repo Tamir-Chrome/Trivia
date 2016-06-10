@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 ﻿Build started 6/9/2016 7:29:08 PM.
      1>Project "C:\Users\User\Documents\Visual Studio 2013\Projects\Trivia\Trivia\Trivia.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
@@ -36,8 +37,35 @@ Time Elapsed 00:00:04.15
 =======
          Trivia.vcxproj -> C:\Users\User\Documents\Visual Studio 2013\Projects\trivia\Debug\Trivia.exe
      1>Done Building Project "C:\Users\User\Documents\Visual Studio 2013\Projects\trivia\Trivia\Trivia.vcxproj" (Build target(s)).
+=======
+﻿Build started 10/06/2016 14:28:01.
+     1>Project "C:\Users\tamir\Documents\Visual Studio 2013\Projects\trivia\Trivia\Trivia.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt DataBase.cpp
+         DataBase.cpp
+     1>c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.h(20): error C2143: syntax error : missing ';' before '<'
+     1>c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.h(20): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+     1>c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.h(20): error C2238: unexpected token(s) preceding ';'
+     1>c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.h(21): error C2143: syntax error : missing ';' before '<'
+     1>c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.h(21): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+     1>c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.h(21): error C2238: unexpected token(s) preceding ';'
+     1>c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.h(22): error C2143: syntax error : missing ';' before '<'
+     1>c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.h(22): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+     1>c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.h(22): error C2238: unexpected token(s) preceding ';'
+     1>c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.cpp(117): error C2039: 'initQuestions' : is not a member of 'DataBase'
+                 c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.h(11) : see declaration of 'DataBase'
+     1>c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.cpp(122): error C2039: 'getBestScores' : is not a member of 'DataBase'
+                 c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.h(11) : see declaration of 'DataBase'
+     1>c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.cpp(127): error C2039: 'getPersonalStatus' : is not a member of 'DataBase'
+                 c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.h(11) : see declaration of 'DataBase'
+     1>Done Building Project "C:\Users\tamir\Documents\Visual Studio 2013\Projects\trivia\Trivia\Trivia.vcxproj" (Build target(s)) -- FAILED.
+>>>>>>> 8f2a920c9240f927402796bcb7447a6fdb2d986b
 
-Build succeeded.
+Build FAILED.
 
+<<<<<<< HEAD
 Time Elapsed 00:00:01.95
 >>>>>>> f450cd9321c401fa94b0383238e46bb560c3b802
+=======
+Time Elapsed 00:00:00.56
+>>>>>>> 8f2a920c9240f927402796bcb7447a6fdb2d986b

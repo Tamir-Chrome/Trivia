@@ -1,6 +1,10 @@
 #TargetFrameworkVersion=v4.0:PlatformToolSet=v120:EnableManagedIncrementalBuild=false:VCToolArchitecture=Native32Bit
 <<<<<<< HEAD
+<<<<<<< HEAD
 Debug|Win32|C:\Users\User\Documents\Visual Studio 2013\Projects\Trivia\|
 =======
 Debug|Win32|C:\Users\User\Documents\Visual Studio 2013\Projects\trivia\|
 >>>>>>> f450cd9321c401fa94b0383238e46bb560c3b802
+=======
+Debug|Win32|C:\Users\tamir\Documents\Visual Studio 2013\Projects\trivia\|
+>>>>>>> 8f2a920c9240f927402796bcb7447a6fdb2d986b
