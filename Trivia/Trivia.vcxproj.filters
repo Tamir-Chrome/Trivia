@@ -42,10 +42,14 @@
     <ClCompile Include="Room.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="sqlite3.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Question.cpp">
+=======
+    <ClCompile Include="Game.cpp">
+>>>>>>> game
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -77,10 +81,14 @@
     <ClInclude Include="Protocol.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="sqlite3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Question.h">
+=======
+    <ClInclude Include="Game.h">
+>>>>>>> game
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
