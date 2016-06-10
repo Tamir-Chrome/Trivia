@@ -36,15 +36,39 @@ DataBase::DataBase()
 		sqliteErr(zErrMsg);
 	*/
 
-	//TODO: add game table
 	/* 
-		create t_users table
 
 		CREATE TABLE `t_users` (
 		`username`	TEXT NOT NULL,
 		`password`	TEXT NOT NULL,
 		`email`	TEXT NOT NULL,
 		PRIMARY KEY(username)
+		);
+
+		CREATE TABLE `t_games` (
+		`game_id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+		`status`	INTEGER NOT NULL,
+		`start_time`	DATETIME NOT NULL,
+		`end_time`	DATETIME
+		);
+
+		CREATE TABLE `t_questions` (
+		`question_id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+		`question`	TEXT NOT NULL,
+		`correct_ans`	TEXT NOT NULL,
+		`ans2`	TEXT NOT NULL,
+		`ans3`	TEXT NOT NULL,
+		`ans4`	TEXT NOT NULL
+		);
+
+		CREATE TABLE `t_players_answers` (
+		`game_id`	INTEGER NOT NULL,
+		`username`	TEXT NOT NULL,
+		`question_id`	INTEGER NOT NULL,
+		`player_answer`	TEXT NOT NULL,
+		`is_correct`	INTEGER NOT NULL,
+		`answer_time`	INTEGER NOT NULL,
+		PRIMARY KEY(game_id,username,question_id)
 		);
 	*/
 
@@ -132,4 +156,34 @@ bool DataBase::isUserAndPassMatch(string username, string password)
 	//else, no match
 	results.clear();
 	return false;
+}
+
+vector<Question*> DataBase::initQuestions(int questionsNo)
+{
+	vector<Question*> questions;
+}
+
+vector<string> DataBase::getBestScores()
+{
+
+}
+
+vector<string> DataBase::getPersonalStatus(string)
+{
+
+}
+
+int DataBase::insertNewGame()
+{
+
+}
+
+bool DataBase::updateGameStatus(int)
+{
+
+}
+
+bool DataBase::addAnswerToPIayer(int, string, int, string, bool, int)
+{
+
 }
