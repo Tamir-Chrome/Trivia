@@ -1,4 +1,4 @@
-﻿Build started 10/06/2016 14:28:01.
+﻿Build started 10/06/2016 15:02:57.
      1>Project "C:\Users\tamir\Documents\Visual Studio 2013\Projects\trivia\Trivia\Trivia.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt DataBase.cpp
@@ -22,4 +22,4 @@
 
 Build FAILED.
 
-Time Elapsed 00:00:00.56
+Time Elapsed 00:00:00.94

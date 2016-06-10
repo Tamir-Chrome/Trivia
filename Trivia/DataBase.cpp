@@ -9,7 +9,6 @@ void sqliteErr(char *zErrMsg)
 {
 	TRACE("SQL error: %s", zErrMsg);
 	sqlite3_free(zErrMsg);
-	system("Pause");
 }
 
 
@@ -117,8 +116,45 @@ bool DataBase::isUserAndPassMatch(string username, string password)
 vector<Question*> DataBase::initQuestions(int questionsNo)
 {
 	vector<Question*> questions;
-}
 
+	int rc;
+	char *zErrMsg = 0;
+	stringstream s;
+
+	s << "select * from t_questions";
+
+	rc = sqlite3_exec(_db, s.str().c_str(), getResults, 0, &zErrMsg);
+	if (rc != SQLITE_OK)
+	{
+		sqliteErr(zErrMsg);
+		return questions;
+	}
+
+
+	int randNum = rand() % (results.size() / 6); //right number is total number of questions
+	int offset = randNum * 6; //index of a question id in results
+
+	for (int i = 0; i < questionsNo; i++)
+	{
+		int id = atoi(results[offset].c_str());
+
+		//check if already chose that question
+		for each (Question* question in questions)
+		{
+			if (id == question->getId())
+			{
+				//skip iteration without losing a question
+				i--;
+				continue;
+			}
+		}
+
+		Question* q = new Question(id, results[offset+1], results[offset+2], results[offset+3], results[offset+4], results[offset+5]);
+		questions.push_back(q);
+	}
+	return questions;
+}
+/*waypoint 3
 vector<string> DataBase::getBestScores()
 {
 
@@ -128,10 +164,10 @@ vector<string> DataBase::getPersonalStatus(string)
 {
 	
 }
-
+*/ 
 int DataBase::insertNewGame()
 {
-	return 0;
+	
 }
 
 bool DataBase::updateGameStatus(int)
@@ -139,7 +175,21 @@ bool DataBase::updateGameStatus(int)
 	return false;
 }
 
-bool DataBase::addAnswerToPIayer(int, string, int, string, bool, int)
+bool DataBase::addAnswerToPIayer(int gameId, string username, int questionId, string answer, bool isCorrect, int answerTime)
 {
-	return false;
+	int rc;
+	char *zErrMsg = 0;
+	stringstream s;
+
+	s << "INSERT INTO t_players_answers(game_id, username, question_id, player_answer, is_correct, answer_time) VALUES(";
+	s << gameId << ",'" << username << "'," << questionId << ",'" << answer << "'," << isCorrect << "," << answerTime << ")";
+
+	rc = sqlite3_exec(_db, s.str().c_str(), NULL, 0, &zErrMsg);
+	if (rc != SQLITE_OK)
+	{
+		sqliteErr(zErrMsg);
+		return false;
+	}
+
+	return true;
 }
