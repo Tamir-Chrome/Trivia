@@ -26,5 +26,9 @@ private:
 	string _name;
 	int _id;
 
+
+	string getUsersAsString(vector<User*> usersList, User* excludeUser);
+	void sendMessage(string message);
+	void sendMessage(User* excludeUser, string message);
 };
 
