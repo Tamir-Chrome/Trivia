@@ -7,4 +7,9 @@
 #define LEAVE_ROOM 211
 #define CREATE_ROOM 213
 #define CLOSE_ROOM 215
+#define START_GAME 217
+#define CLIENT_ANSWER 219
+#define LEAVE_GAME 222
+#define BEST_SCORE_REQ 223
+#define OWN_SITUATION 225
 #define EXIT 299

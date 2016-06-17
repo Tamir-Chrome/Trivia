@@ -1,6 +1,6 @@
 #include "User.h"
 #include "Room.h"
-
+#include "Game.h"
 
 User::User(string username, SOCKET sock)
 {
@@ -40,34 +40,74 @@ void User::clearRoom()
 
 bool User::createRoom(int roomId, string roomName, int maxUsers, int questionsNo, int questionTime)
 {
-	return false;
 	if (_currRoom != NULL)
 	{
-		if (_currRoom->getId()==roomId)
-		{
-
-		}
+		Helper::sendData(_sock, "1140");
+		return false;
+	}
+	else
+	{
+		_currRoom = new Room(roomId, this, roomName, maxUsers, questionsNo, questionTime);
+		Helper::sendData(_sock, "1141");
+		return true;
 	}
 }
 
-bool User::joinRoom(Room*)
+bool User::joinRoom(Room* newRoom)
 {
-	return false;
+	if (_currRoom != NULL)
+	{
+		return false;
+	}
+	else
+	{
+		return newRoom->joinRoom(this);
+	}
 }
 
 void User::leaveRoom()
 {
-
+	if (_currRoom != NULL)
+	{
+		_currRoom->leaveRoom(this);
+		_currRoom = NULL;
+	}
 }
 
 int User::closeRoom()
 {
-	return 0;
+	int roomId;
+	if (_currRoom == NULL)
+	{
+		return -1;
+	}
+	else
+	{
+		roomId = _currRoom->closeRoom(this);
+		if (roomId != -1)
+		{
+			delete _currRoom;
+			_currRoom = NULL;
+		}
+	}
 }
 
 bool User::leaveGame()
 {
-	return false;
+	bool flag;
+	if (_currGame == NULL)
+	{
+		return false;
+	}
+	else
+	{
+		flag = _currGame->leaveGame(this);
+		if (flag)
+		{
+			_currGame = NULL;
+		}
+		return flag;
+	}
 }
 
 string User::getUsername()
@@ -78,4 +118,9 @@ string User::getUsername()
 SOCKET User::getScoket()
 {
 	return _sock;
+}
+
+Game* User::getGame()
+{
+	return _currGame;
 }

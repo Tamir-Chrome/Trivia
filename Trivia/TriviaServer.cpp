@@ -5,6 +5,7 @@
 #include "Validator.h"
 
 
+
 int TriviaServer::_roomIdSequence;
 
 TriviaServer::TriviaServer()
@@ -250,6 +251,28 @@ void TriviaServer::handleSignOut(RecievedMessage* msg)
 
 	_connectedUsers.erase(user->getScoket());
 
+}
+
+void TriviaServer::handleLeaveGame(RecievedMessage* msg)
+{
+	bool flag = msg->getUser()->leaveGame();
+	if (flag)
+	{
+		msg->getUser()->getGame()->~Game();
+	}
+}
+
+void TriviaServer::handleStartGame(RecievedMessage* msg)
+{
+	try
+	{
+		Game* g = new Game(msg->getUser()->getRoom()->getUsers(), msg->getUser()->getRoom()->getQuestionsNo(), _db);
+
+	}
+	catch (exception e)
+	{
+		msg->getUser()->send("1180");
+	}
 }
 
 

@@ -20,12 +20,13 @@ private:
 	void initQuestionsFromDB();
 	void sendQuestionToAllUsers();
 	
-	//vector<Question*> _questions;
+	vector<Question*> _questions;
 	vector<User*> _players;
 	int _questions_no;
 	int _currQuestionIndex;
 	DataBase& _db;
 	map<string, int> _results;
 	int _currentTurnAnswers;
+	int _gameId;
 };
 

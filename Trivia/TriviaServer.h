@@ -10,6 +10,7 @@
 #include "User.h"
 #include "Protocol.h"
 #include <condition_variable>
+#include "Game.h"
 
  
 using namespace std;
@@ -41,8 +42,8 @@ private:
 	bool handleSignup(RecievedMessage*);
 	void handleSignOut(RecievedMessage*);
 
-	//void handleLeaveGame(RecievedMessage*);
-	//void handleStartGame(RecievedMessage*);
+	void handleLeaveGame(RecievedMessage*);
+	void handleStartGame(RecievedMessage*);
 	//void handlePlayerAnswer(RecievedMessage*);
 
 	bool handleCreateRoom(RecievedMessage*);

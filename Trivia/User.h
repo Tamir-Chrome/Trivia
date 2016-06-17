@@ -19,7 +19,7 @@ public:
 	std::string getUsername();
 	SOCKET getScoket();
 	Room* getRoom();
-	//Game* getGame();
+	Game* getGame();
 	void setGame(Game*);
 	void clearRoom();
 	bool createRoom(int roomId, string roomName, int maxUsers, int questionsNo, int questionTime);
