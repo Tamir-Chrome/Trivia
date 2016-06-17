@@ -1,15 +1,35 @@
-﻿Build started 16/06/2016 00:32:32.
-     1>Project "C:\Users\tamir\Documents\Visual Studio 2013\Projects\trivia\Trivia\Trivia.vcxproj" on node 2 (Build target(s)).
+﻿Build started 6/17/2016 6:11:25 PM.
+     1>Project "C:\Users\User\Documents\Visual Studio 2013\Projects\Trivia\Trivia\Trivia.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt DataBase.cpp Source.cpp TriviaServer.cpp
-         DataBase.cpp
-     1>c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.cpp(186): warning C4244: 'initializing' : conversion from 'sqlite3_int64' to 'int', possible loss of data
-         Generating Code...
-         Skipping... (no relevant changes detected)
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt DataBase.cpp Game.cpp Room.cpp Source.cpp TriviaServer.cpp User.cpp
+         User.cpp
          TriviaServer.cpp
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.cpp(514): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.cpp(525): warning C4018: '<' : signed/unsigned mismatch
          Source.cpp
+         Room.cpp
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\room.cpp(50): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\room.cpp(75): warning C4018: '<' : signed/unsigned mismatch
+         DataBase.cpp
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\database.cpp(185): warning C4244: 'initializing' : conversion from 'sqlite3_int64' to 'int', possible loss of data
+         Generating Code...
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\room.cpp(46): warning C4715: 'Room::joinRoom' : not all control paths return a value
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\user.cpp(93): warning C4715: 'User::closeRoom' : not all control paths return a value
+         Compiling...
+         Game.cpp
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\game.cpp(19): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\game.cpp(23): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\game.cpp(31): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\game.cpp(35): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\game.cpp(54): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\game.cpp(60): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\game.cpp(69): warning C4018: '<' : signed/unsigned mismatch
+         Generating Code...
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TC /analyze- /errorReport:prompt sqlite3.c
+         sqlite3.c
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\tamir\Documents\Visual Studio 2013\Projects\trivia\Debug\Trivia.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\tamir\Documents\Visual Studio 2013\Projects\trivia\Debug\Trivia.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\tamir\Documents\Visual Studio 2013\Projects\trivia\Debug\Trivia.lib" /MACHINE:X86 Debug\DataBase.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\User\Documents\Visual Studio 2013\Projects\Trivia\Debug\Trivia.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\User\Documents\Visual Studio 2013\Projects\Trivia\Debug\Trivia.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\User\Documents\Visual Studio 2013\Projects\Trivia\Debug\Trivia.lib" /MACHINE:X86 Debug\DataBase.obj
+         Debug\Game.obj
          Debug\Helper.obj
          Debug\Question.obj
          Debug\RecievedMessage.obj
@@ -20,9 +40,10 @@
          Debug\TriviaServer.obj
          Debug\User.obj
          Debug\Validator.obj
-         Trivia.vcxproj -> C:\Users\tamir\Documents\Visual Studio 2013\Projects\trivia\Debug\Trivia.exe
-     1>Done Building Project "C:\Users\tamir\Documents\Visual Studio 2013\Projects\trivia\Trivia\Trivia.vcxproj" (Build target(s)).
+         LINK : C:\Users\User\Documents\Visual Studio 2013\Projects\Trivia\Debug\Trivia.exe not found or not built by the last incremental link; performing full link
+         Trivia.vcxproj -> C:\Users\User\Documents\Visual Studio 2013\Projects\Trivia\Debug\Trivia.exe
+     1>Done Building Project "C:\Users\User\Documents\Visual Studio 2013\Projects\Trivia\Trivia\Trivia.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.37
+Time Elapsed 00:00:17.00

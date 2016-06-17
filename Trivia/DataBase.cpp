@@ -41,7 +41,6 @@ int getResults(void* notUsed, int argc, char** argv, char** azCol)
 		results.push_back(argv[i]);
 	
 	return 0;
-
 }
 
 
