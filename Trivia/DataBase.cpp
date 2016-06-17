@@ -1,6 +1,5 @@
 #include "DataBase.h"
 #include <sstream>
-#include <vector>
 #include "Helper.h"
 
 vector<string> results;
@@ -44,6 +43,9 @@ int getResults(void* notUsed, int argc, char** argv, char** azCol)
 	return 0;
 
 }
+
+
+
 
 bool DataBase::isUserExists(string username)
 {
@@ -154,6 +156,7 @@ vector<Question*> DataBase::initQuestions(int questionsNo)
 	}
 	return questions;
 }
+
 /*waypoint 3
 vector<string> DataBase::getBestScores()
 {
@@ -167,12 +170,51 @@ vector<string> DataBase::getPersonalStatus(string)
 */ 
 int DataBase::insertNewGame()
 {
-	
+	int rc;
+	char *zErrMsg = 0;
+	stringstream s;
+
+	s << "INSERT INTO t_games(status, start_time, end_time) VALUES(0, NOW, NULL)";
+
+	rc = sqlite3_exec(_db, s.str().c_str(), NULL, 0, &zErrMsg);
+	if (rc != SQLITE_OK)
+	{
+		sqliteErr(zErrMsg);
+		return -1;
+	}
+
+	int rowid = sqlite3_last_insert_rowid(_db);
+
+	s << "select game_id from t_games where rowid == " << rowid;
+	rc = sqlite3_exec(_db, s.str().c_str(), getResults, 0, &zErrMsg);
+	if (rc != SQLITE_OK)
+	{
+		sqliteErr(zErrMsg);
+		return -1;
+	}
+
+	int game_id = atoi(results[0].c_str());
+	results.clear();
+
+	return game_id;
 }
 
-bool DataBase::updateGameStatus(int)
+bool DataBase::updateGameStatus(int game_id)
 {
-	return false;
+	int rc;
+	char *zErrMsg = 0;
+	stringstream s;
+
+	s << "update t_games set status=1, end_time=NOW where game_id == " << game_id;
+
+	rc = sqlite3_exec(_db, s.str().c_str(), NULL, 0, &zErrMsg);
+	if (rc != SQLITE_OK)
+	{
+		sqliteErr(zErrMsg);
+		return false;
+	}
+
+	return true;
 }
 
 bool DataBase::addAnswerToPIayer(int gameId, string username, int questionId, string answer, bool isCorrect, int answerTime)

@@ -17,7 +17,9 @@ TriviaServer::TriviaServer()
 	}
 	catch (exception e)
 	{
-		TRACE("%s", e.what());
+		TRACE("Exception was catch in c'tor TriviaServer. what= %s\n", e.what());
+		system("PAUSE");
+		exit(1);
 	}
 	
 }
@@ -74,13 +76,21 @@ void TriviaServer::clientHandler(SOCKET client)
 {
 	int code;
 	RecievedMessage* rec;
-	while (true)
+	try
 	{
-		code = Helper::getMessageTypeCode(client);
-		rec = buildRecieveMessage(client, code);
-		addRecievedMessage(rec);
+
+		while (true)
+		{
+			code = Helper::getMessageTypeCode(client);
+			rec = buildRecieveMessage(client, code);
+			addRecievedMessage(rec);
+		}
+		//make end of connection message
 	}
-	//make end of connection message
+	catch (exception e)
+	{
+		TRACE("Exception was catch in function clientHandler. socket=%d, what=%s\n", client, e.what());
+	}
 }
 
 void TriviaServer::handleRecievedMessages()
@@ -98,12 +108,22 @@ void TriviaServer::handleRecievedMessages()
 		bool useless_flag = true;
 		msg->setUser(getUserBySocket(msg->getSock()));
 		int code = msg->getMessageCode();
+		int sock = msg->getSock();
+
+		TRACE("--------------------------------------");
+		TRACE("handleRecievedMessages: msgCode = %d, client_socket: %d", code, sock);
+		User* user = nullptr;
 		switch (code)
 		{
 
 		case SIGN_IN:
-			//wtf am i suppose to do with user !!?
-			User* user = handleSignin(msg);
+			user = handleSignin(msg);
+			if (user)
+			{
+				TRACE("SEND: User signed in successfuly: username = %s, socket = %d", user->getUsername().c_str(), sock)
+			}
+			else
+				TRACE("SEND: User try sign in with wrong details: username = %s, socket = %d", msg->getValues()[0].c_str(), sock)
 			break;
 
 		case SIGN_OUT:
@@ -111,7 +131,6 @@ void TriviaServer::handleRecievedMessages()
 			break;
 
 		case SIGN_UP:
-			//wtf am i suppose to do with useless_flag !!?
 			useless_flag = handleSignup(msg);
 			break;
 
@@ -142,9 +161,12 @@ void TriviaServer::handleRecievedMessages()
 			break;
 
 		default:
+			TRACE("EXIT")
 			safeDeleteUser(msg);
 			break;
 		}
+
+		TRACE("--------------------------------------")
 
 	}
 	catch (exception e)
@@ -157,18 +179,21 @@ void TriviaServer::handleRecievedMessages()
 
 void TriviaServer::safeDeleteUser(RecievedMessage* msg)
 {
-	if (msg->getUser()) //if there is a user
+	try
 	{
-		try
+		if (msg->getUser()) //if there is a user
 		{
 			handleSignOut(msg);
-			closesocket(msg->getSock());
+			
 		}
-		catch (exception e)
-		{
-			TRACE("%s", e.what());
-		}
+		TRACE("Closing socket = %d\n", msg->getSock());
+		closesocket(msg->getSock());
 	}
+	catch (exception e)
+	{
+		TRACE("%s", e.what());
+	}
+	
 }
 
 RecievedMessage* TriviaServer::buildRecieveMessage(SOCKET client, int code)
@@ -286,7 +311,11 @@ User* TriviaServer::handleSignin(RecievedMessage* msg)
 
 	User* newUser = new User(username, msg->getSock());
 	_connectedUsers.insert(pair<SOCKET, User*>(msg->getSock(), newUser)); //insert new user to connected users
+	TRACE("Adding new user to connected users list: socket = %d, username = %s\n", msg->getSock(), username.c_str());
+	
 	Helper::sendData(msg->getSock(), "1020");
+	TRACE("Message sent to user: %s, msg: %d", username.c_str(), msg->getSock());
+
 	return newUser;
 }
 
@@ -299,18 +328,21 @@ bool TriviaServer::handleSignup(RecievedMessage* msg)
 
 	if (Validator::isPasswordValid(password) == false)
 	{
+		TRACE("SEND: User signup failed. Invalid password: username = %s, socket = %d", username.c_str(), msg->getSock())
 		Helper::sendData(msg->getSock(), "1041");
 		return false;
 	}
 
 	if (Validator::isUsernameValid(username) == false)
 	{
+		TRACE("SEND: User signup failed. Invalid username: username = %s, socket = %d", username.c_str(), msg->getSock())
 		Helper::sendData(msg->getSock(), "1043");
 		return false;
 	}
 
 	if (_db.isUserExists(username))
 	{
+		TRACE("SEND: User signup failed. User already exist: username = %s, socket = %d", username.c_str(), msg->getSock())
 		Helper::sendData(msg->getSock(), "1042");
 		return false;
 	}

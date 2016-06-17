@@ -1,25 +1,28 @@
-﻿Build started 10/06/2016 15:02:57.
+﻿Build started 16/06/2016 00:32:32.
      1>Project "C:\Users\tamir\Documents\Visual Studio 2013\Projects\trivia\Trivia\Trivia.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt DataBase.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt DataBase.cpp Source.cpp TriviaServer.cpp
          DataBase.cpp
-     1>c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.h(20): error C2143: syntax error : missing ';' before '<'
-     1>c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.h(20): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-     1>c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.h(20): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.h(21): error C2143: syntax error : missing ';' before '<'
-     1>c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.h(21): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-     1>c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.h(21): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.h(22): error C2143: syntax error : missing ';' before '<'
-     1>c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.h(22): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-     1>c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.h(22): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.cpp(117): error C2039: 'initQuestions' : is not a member of 'DataBase'
-                 c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.h(11) : see declaration of 'DataBase'
-     1>c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.cpp(122): error C2039: 'getBestScores' : is not a member of 'DataBase'
-                 c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.h(11) : see declaration of 'DataBase'
-     1>c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.cpp(127): error C2039: 'getPersonalStatus' : is not a member of 'DataBase'
-                 c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.h(11) : see declaration of 'DataBase'
-     1>Done Building Project "C:\Users\tamir\Documents\Visual Studio 2013\Projects\trivia\Trivia\Trivia.vcxproj" (Build target(s)) -- FAILED.
+     1>c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\database.cpp(186): warning C4244: 'initializing' : conversion from 'sqlite3_int64' to 'int', possible loss of data
+         Generating Code...
+         Skipping... (no relevant changes detected)
+         TriviaServer.cpp
+         Source.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\tamir\Documents\Visual Studio 2013\Projects\trivia\Debug\Trivia.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\tamir\Documents\Visual Studio 2013\Projects\trivia\Debug\Trivia.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\tamir\Documents\Visual Studio 2013\Projects\trivia\Debug\Trivia.lib" /MACHINE:X86 Debug\DataBase.obj
+         Debug\Helper.obj
+         Debug\Question.obj
+         Debug\RecievedMessage.obj
+         Debug\Room.obj
+         Debug\socketAssist.obj
+         Debug\Source.obj
+         Debug\sqlite3.obj
+         Debug\TriviaServer.obj
+         Debug\User.obj
+         Debug\Validator.obj
+         Trivia.vcxproj -> C:\Users\tamir\Documents\Visual Studio 2013\Projects\trivia\Debug\Trivia.exe
+     1>Done Building Project "C:\Users\tamir\Documents\Visual Studio 2013\Projects\trivia\Trivia\Trivia.vcxproj" (Build target(s)).
 
-Build FAILED.
+Build succeeded.
 
-Time Elapsed 00:00:00.94
+Time Elapsed 00:00:01.37
