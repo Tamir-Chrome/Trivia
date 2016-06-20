@@ -383,11 +383,20 @@ void TriviaServer::handleStartGame(RecievedMessage* msg)
 	try
 	{
 		Game* g = new Game(msg->getUser()->getRoom()->getUsers(), msg->getUser()->getRoom()->getQuestionsNo(), _db);
-
+		//ask Itay
 	}
 	catch (exception e)
 	{
 		msg->getUser()->send("1180");
+	}
+}
+
+void TriviaServer::handlePlayerAnswer(RecievedMessage* msg)
+{
+	Game* g = msg->getUser()->getGame();
+	if (g != NULL)
+	{
+		//g->handleAnswerFromUser(msg->getUser(), g->)
 	}
 }
 
