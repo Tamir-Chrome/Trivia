@@ -10,11 +10,7 @@ void main()
 {
 	TriviaServer t;
 	t.serve();
-	
-
 
 	system("PAUSE");
-
-
 
 }

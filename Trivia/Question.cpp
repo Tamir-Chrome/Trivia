@@ -1,28 +1,29 @@
 #include "Question.h"
-#include <time.h>
+#include <algorithm>
 
 Question::Question(int id, string question, string correctAnswer, string answer2, string answer3, string answer4)
 {
-	srand(time(NULL));
+	_id = id;
+	_question = question;
 
 	_answers[0] = correctAnswer;
 	_answers[1] = answer2;
 	_answers[2] = answer3;
 	_answers[3] = answer4;
 
-	_correctAnswerIndex = rand() % 4;
+	random_shuffle(std::begin(_answers), std::end(_answers));
 
-	//if the index is not the way is set to be (0)
-	//swap the correct answer with a different answer
-	if (_correctAnswerIndex != 0)
+	for (int i = 0; i < 4; i++)
 	{
-		string temp = _answers[_correctAnswerIndex];
-		_answers[_correctAnswerIndex] = correctAnswer;
-		_answers[3 - _correctAnswerIndex] = temp;
+		if (_answers[i] == correctAnswer)
+		{
+			_correctAnswerIndex = i;
+			break;
+		}
 	}
 }
 
-string Question::getQuestions()
+string Question::getQuestion()
 {
 	return _question;
 }
