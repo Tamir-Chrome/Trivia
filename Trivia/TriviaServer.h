@@ -44,7 +44,7 @@ private:
 
 	void handleLeaveGame(RecievedMessage*);
 	void handleStartGame(RecievedMessage*);
-	//void handlePlayerAnswer(RecievedMessage*);
+	void handlePlayerAnswer(RecievedMessage*);
 
 	bool handleCreateRoom(RecievedMessage*);
 	bool handleCloseRoom(RecievedMessage*);

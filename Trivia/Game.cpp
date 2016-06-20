@@ -1,5 +1,5 @@
 #include "Game.h"
-
+#include <string>
 
 Game::Game(const vector<User*>& players, int questionsNo, DataBase& db) : _db(db)
 {
@@ -9,12 +9,13 @@ Game::Game(const vector<User*>& players, int questionsNo, DataBase& db) : _db(db
 	try
 	{
 		_gameId = _db.insertNewGame();
+		initQuestionsFromDB();
 	}
 	catch (exception e)
 	{
 		TRACE("%s", e.what());
 	}
-	_questions = _db.initQuestions(_questions_no);
+	
 	_players = players;
 	for (int i = 0; i < _players.size(); i++)
 	{
@@ -28,13 +29,12 @@ Game::Game(const vector<User*>& players, int questionsNo, DataBase& db) : _db(db
 
 Game::~Game()
 {
-	for (int i = 0; i < _questions.size(); i++)
+	_questions.clear();
+	
+	for (int i = _players.size()-1; i >= 0; i--)
 	{
-		delete _questions[i];
-	}
-	for (int i = 0; i < _players.size(); i++)
-	{
-		delete _players[i];
+		_players[i]->clearRoom();
+		_players.pop_back();
 	}
 }
 
@@ -47,28 +47,42 @@ void Game::handleFinishGame()
 {
 	string mes = "";
 	_db.updateGameStatus(_gameId);
-	try
+	
+	mes = mes + "121";
+	mes = mes + to_string(_players.size());
+	for (int i = 0; i < _players.size(); i++)
 	{
-		mes = mes + "121";
-		mes = mes + to_string(_players.size());
-		for (int i = 0; i < _players.size(); i++)
-		{
-			mes = mes + to_string(_players[i]->getUsername().size());
-			mes = mes + _players[i]->getUsername();
-			mes = mes + to_string(_results[_players[i]->getUsername()]);
-		}
-		for (int i = 0; i < _players.size(); i++)
-		{
-			Helper::sendData(_players[i]->getScoket(), mes);
-		}
-	}
-	catch (exception e)
-	{
-		TRACE("%s", e.what());
+		string nameSize = to_string(_players[i]->getUsername().size());
+		if (nameSize.size() < 10)
+			mes = mes + '0';
+
+		mes = mes + nameSize;
+
+		mes = mes + _players[i]->getUsername();
+
+
+		int points = _results[_players[i]->getUsername()];
+		if (points < 10)
+			mes = mes + '0';
+
+		mes = mes + to_string(points);
 	}
 	for (int i = 0; i < _players.size(); i++)
 	{
-		delete _players[i];
+		try
+		{
+			_players[i]->send(mes);
+		}
+		catch (exception e)
+		{
+			TRACE("handleFinishGame: %s", e.what());
+		}
+	}
+	
+	
+	for (int i = 0; i < _players.size(); i++)
+	{
+		_players[i]->setGame(nullptr);
 	}
 }
 
@@ -104,29 +118,25 @@ bool Game::handleAnswerFromUser(User* user, int answerNo, int time)
 	_currentTurnAnswers++;
 	bool flag = false;
 	bool success;
+	answerNo--;
 	if (answerNo == _questions[_currQuestionIndex]->getCorrectAnswerIndex())
 	{
-		_results[user->getUsername()]++;
 		flag = true;
-	}
-	if (answerNo != 5)
-	{
 		success = _db.addAnswerToPIayer(_gameId, user->getUsername(), _questions[_currQuestionIndex]->getId(), _questions[_currQuestionIndex]->getAnswers()[answerNo], flag, time);
+		_results[user->getUsername()]++;
 	}
+	else if (answerNo != 4)
+		success = _db.addAnswerToPIayer(_gameId, user->getUsername(), _questions[_currQuestionIndex]->getId(), _questions[_currQuestionIndex]->getAnswers()[answerNo], flag, time);
 	else
-	{
 		success = _db.addAnswerToPIayer(_gameId, user->getUsername(), _questions[_currQuestionIndex]->getId(), "", flag, time);
-	}
-	string send = "";
-	send = send + "120";
-	if (flag)
-	{
-		send = send + "1";
-	}
-	else
-	{
-		send = send + "0";
-	}
+	
+	if (success == false)
+		return false;
+
+	string send = "120";
+
+	send += (flag) ? "1" : "0";
+	
 	Helper::sendData(user->getScoket(), send);
 	return handleNextTurn();
 }
@@ -154,15 +164,49 @@ int Game::getID()
 
 bool Game::insertGameToDB()
 {
-	return false;
+	int id = _db.insertNewGame();
+	if (id == -1)
+		return false;
+
+	_gameId = id;
+	return true;
 }
 
 void Game::initQuestionsFromDB()
 {
-
+	_questions = _db.initQuestions(_questions_no);
 }
 
 void Game::sendQuestionToAllUsers()
 {
+	_currentTurnAnswers = 0;
+	string msg = "118";
 
+	//adds question
+	string qSize = to_string(_questions[_currQuestionIndex]->getQuestion().size());
+
+	for (int i = 0; i < 3 - qSize.size(); i++)//add padding zeros
+		msg += '0';
+
+	msg += qSize;
+	msg += _questions[_currQuestionIndex]->getQuestion();
+
+	//adds answrs
+	string* answers = _questions[_currQuestionIndex]->getAnswers();
+
+	for (int i = 0; i < 4; i++)
+	{
+		string aSize = to_string(answers[i].size());
+
+		for (int i = 0; i < 3 - aSize.size(); i++)//add padding zeros
+			msg += '0';
+
+		msg += aSize;
+		msg += answers[i];
+	}
+
+	for each (User* user in _players)
+	{
+		user->send(msg);
+	}
 }

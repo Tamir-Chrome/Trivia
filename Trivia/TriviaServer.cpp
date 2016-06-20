@@ -6,7 +6,7 @@
 
 
 
-int TriviaServer::_roomIdSequence;
+int TriviaServer::_roomIdSequence = 1;
 
 TriviaServer::TriviaServer()
 {
@@ -51,6 +51,7 @@ void TriviaServer::serve()
 		bindAndListen();
 		TRACE("binded\nlistening (Port = 8820)");
 		thread messageThread(&TriviaServer::handleRecievedMessages, this);
+		messageThread.detach();
 		while (true)
 		{
 			TRACE("accepting client...")
@@ -75,124 +76,141 @@ void TriviaServer::accept()
 
 void TriviaServer::clientHandler(SOCKET client)
 {
-	int code;
+	int code = -1;
 	RecievedMessage* rec;
 	try
 	{
-
-		while (true)
+		while (code != 299 && code)
 		{
 			code = Helper::getMessageTypeCode(client);
 			rec = buildRecieveMessage(client, code);
 			addRecievedMessage(rec);
 		}
-		//make end of connection message
+
+		rec = buildRecieveMessage(client, 299);
+		addRecievedMessage(rec);
 	}
 	catch (exception e)
 	{
 		TRACE("Exception was catch in function clientHandler. socket=%d, what=%s\n", client, e.what());
+		rec = buildRecieveMessage(client, 299);
+		addRecievedMessage(rec);
 	}
 }
 
 void TriviaServer::handleRecievedMessages()
 {
-	unique_lock<mutex> rcvMsgLock(_mtxRecievedMessages);
-	cv.wait(rcvMsgLock);
-
-	RecievedMessage* msg = _queRcvMessages.front();
-	_queRcvMessages.pop();
-
-	rcvMsgLock.unlock();
-
-	try
+	while (true)
 	{
-		bool useless_flag = true;
-		msg->setUser(getUserBySocket(msg->getSock()));
-		int code = msg->getMessageCode();
-		int sock = msg->getSock();
+		unique_lock<mutex> rcvMsgLock(_mtxRecievedMessages);
+		cv.wait(rcvMsgLock);
 
-		TRACE("--------------------------------------");
-		TRACE("handleRecievedMessages: msgCode = %d, client_socket: %d", code, sock);
-		User* user = nullptr;
-		switch (code)
+		RecievedMessage* msg = _queRcvMessages.front();
+		_queRcvMessages.pop();
+
+		rcvMsgLock.unlock();
+
+		try
 		{
+			bool useless_flag = true;
+			msg->setUser(getUserBySocket(msg->getSock()));
+			int code = msg->getMessageCode();
+			int sock = msg->getSock();
 
-		case SIGN_IN:
-			user = handleSignin(msg);
-			if (user)
+			TRACE("--------------------------------------");
+			TRACE("handleRecievedMessages: msgCode = %d, client_socket: %d", code, sock);
+			User* user = nullptr;
+			switch (code)
 			{
-				TRACE("SEND: User signed in successfuly: username = %s, socket = %d", user->getUsername().c_str(), sock)
+
+			case SIGN_IN:
+				user = handleSignin(msg);
+				if (user)
+				{
+					TRACE("SEND: User signed in successfuly: username = %s, socket = %d", user->getUsername().c_str(), sock)
+				}
+				else
+					TRACE("SEND: User try sign in with wrong details: username = %s, socket = %d", msg->getValues()[0].c_str(), sock)
+					break;
+
+			case SIGN_OUT:
+				handleSignOut(msg);
+				break;
+
+			case SIGN_UP:
+				useless_flag = handleSignup(msg);
+				if (useless_flag)
+					TRACE("SEND: User signed up successfuly: username = %s, socket = %d", msg->getValues()[0].c_str(), sock)
+				break;
+
+			case GET_ROOMS:
+				handleGetRooms(msg);
+				break;
+
+			case GET_USERS_ROOM:
+				handleGetUsersInRoom(msg);
+				break;
+
+			case JOIN_ROOM:
+				//wtf am i suppose to do with useless_flag !!?
+				useless_flag = handleJoinRoom(msg);
+				break;
+
+			case LEAVE_ROOM:
+				//wtf am i suppose to do with useless_flag !!?
+				useless_flag = handleLeaveRoom(msg);
+				break;
+
+			case CREATE_ROOM:
+				useless_flag = handleCreateRoom(msg);
+				break;
+
+			case CLOSE_ROOM:
+				useless_flag = handleCloseRoom(msg);
+				break;
+
+			case START_GAME:
+				handleStartGame(msg);
+				break;
+
+			case CLIENT_ANSWER:
+				handlePlayerAnswer(msg);
+				break;
+
+			case LEAVE_GAME:
+				handleLeaveGame(msg);
+				break;
+
+			default:
+				TRACE("EXIT")
+				safeDeleteUser(msg);
+				break;
 			}
-			else
-				TRACE("SEND: User try sign in with wrong details: username = %s, socket = %d", msg->getValues()[0].c_str(), sock)
-			break;
 
-		case SIGN_OUT:
-			handleSignOut(msg);
-			break;
+			TRACE("--------------------------------------");
 
-		case SIGN_UP:
-			useless_flag = handleSignup(msg);
-			break;
+			delete msg;
 
-		case GET_ROOMS:
-			handleGetRooms(msg);
-			break;
-
-		case GET_USERS_ROOM:
-			handleGetUsersInRoom(msg);
-			break;
-
-		case JOIN_ROOM:
-			//wtf am i suppose to do with useless_flag !!?
-			useless_flag = handleJoinRoom(msg);
-			break;
-
-		case LEAVE_ROOM:
-			//wtf am i suppose to do with useless_flag !!?
-			useless_flag = handleLeaveRoom(msg);
-			break;
-
-		case CREATE_ROOM:
-			useless_flag = handleLeaveRoom(msg);
-			break;
-
-		case CLOSE_ROOM:
-			useless_flag = handleCloseRoom(msg);
-			break;
-
-		default:
-			TRACE("EXIT")
-			safeDeleteUser(msg);
-			break;
 		}
-
-		TRACE("--------------------------------------")
-
+		catch (exception e)
+		{
+			TRACE("%s", e.what());
+			safeDeleteUser(msg);
+		}
 	}
-	catch (exception e)
-	{
-		TRACE("%s", e.what());
-		safeDeleteUser(msg);
-	}
-
 }
 
 void TriviaServer::safeDeleteUser(RecievedMessage* msg)
 {
 	try
 	{
-		if (msg->getUser()) //if there is a user
-		{
-			handleSignOut(msg);
-			
-		}
+		handleSignOut(msg);
 		TRACE("Closing socket = %d\n", msg->getSock());
 		closesocket(msg->getSock());
 	}
 	catch (exception e)
 	{
-		TRACE("%s", e.what());
+		TRACE("safeDeleteUser: %s", e.what());
 	}
 	
 }
@@ -273,6 +291,14 @@ RecievedMessage* TriviaServer::buildRecieveMessage(SOCKET client, int code)
 		//get time for question
 		string questionsTimeInSec = Helper::getStringPartFromSocket(client, 2);
 		v.push_back(questionsTimeInSec);
+	}
+	else if (code == CLIENT_ANSWER)
+	{
+		string ansNumber = Helper::getStringPartFromSocket(client, 1);
+		v.push_back(ansNumber);
+
+		string timeInSec = Helper::getStringPartFromSocket(client, 2);
+		v.push_back(timeInSec);
 	}
 	recM = new RecievedMessage(client, code, v);
 	return recM;
@@ -365,8 +391,26 @@ void TriviaServer::handleSignOut(RecievedMessage* msg)
 	if (!user) //if no user
 		return;
 
+	handleLeaveGame(msg);
+	handleCloseRoom(msg);
+	handleLeaveRoom(msg);
+
 	_connectedUsers.erase(user->getScoket());
 
+}
+
+void TriviaServer::handlePlayerAnswer(RecievedMessage* msg)
+{
+	Game* game = msg->getUser()->getGame();
+	if (game)
+	{
+		bool flag = game->handleAnswerFromUser(msg->getUser(), atoi(msg->getValues()[0].c_str()), atoi(msg->getValues()[1].c_str()));
+		if (!flag)
+		{
+			game->~Game();
+			TRACE("handlePlayerAnswer: Game was ended and released from memory");
+		}
+	}
 }
 
 void TriviaServer::handleLeaveGame(RecievedMessage* msg)
@@ -375,6 +419,7 @@ void TriviaServer::handleLeaveGame(RecievedMessage* msg)
 	if (flag)
 	{
 		msg->getUser()->getGame()->~Game();
+		TRACE("handleLeaveGame: Game was ended and released from memory");
 	}
 }
 
@@ -382,8 +427,14 @@ void TriviaServer::handleStartGame(RecievedMessage* msg)
 {
 	try
 	{
-		Game* g = new Game(msg->getUser()->getRoom()->getUsers(), msg->getUser()->getRoom()->getQuestionsNo(), _db);
+		Room* room = msg->getUser()->getRoom();
+		Game* g = new Game(room->getUsers(), room->getQuestionsNo(), _db);
 
+
+		auto it = _rooms.find(room->getId());
+		_rooms.erase(it);
+
+		g->sendFirstQuestion();
 	}
 	catch (exception e)
 	{
@@ -408,19 +459,21 @@ bool TriviaServer::handleCreateRoom(RecievedMessage* msg)
 	maxUsers = atoi(values[1].c_str());
 	questionsNo = atoi(values[2].c_str());
 	questionTime = atoi(values[3].c_str());
-	
-	
-	unique_lock<mutex> idLock(_mtxRoomId);
-	int roomId = _roomIdSequence;
-	_roomIdSequence++;
-	idLock.unlock();
 
+
+	int roomId=-1;
+	//lock scope
+	{
+		lock_guard<mutex> lock(_mtxRoomId);
+		roomId = _roomIdSequence;
+		_roomIdSequence++;
+	}
 	
-	bool isCreated = user->createRoom(_roomIdSequence, roomName, maxUsers, questionsNo, questionTime);
+	bool isCreated = user->createRoom(roomId, roomName, maxUsers, questionsNo, questionTime);
 	if (!isCreated) //room did not create
 		return false;
 
-
+	_rooms.insert(pair<int, Room*>(roomId, user->getRoom()));
 	
 
 	return true; //created room
@@ -436,11 +489,17 @@ bool TriviaServer::handleCloseRoom(RecievedMessage* msg)
 	if (user->getRoom() == nullptr) //no room
 		return false;
 
-	if (user->closeRoom() != -1) //if failed
+	int roomId = user->closeRoom();
+	if (roomId == -1) //if failed
 		return false;
 	
+	
+	auto it = _rooms.find(roomId);
+	_rooms.erase(it);
+
 	return true;
 }
+
 //sends feedback
 bool TriviaServer::handleJoinRoom(RecievedMessage* msg)
 {
@@ -477,6 +536,7 @@ bool TriviaServer::handleLeaveRoom(RecievedMessage* msg)
 
 	//sends to user if success
 	user->leaveRoom();
+	user->send("1120");
 	return true;
 }
 
@@ -547,18 +607,34 @@ void TriviaServer::handleGetRooms(RecievedMessage* msg)
 	user->send(sendMsg);
 }
 
-User* TriviaServer::getUserByName(string)
+User* TriviaServer::getUserByName(string name)
 {
+	for (auto it = _connectedUsers.begin(); it != _connectedUsers.end(); ++it)
+	{
+		User* user = it->second;
+		if (user->getUsername() == name)
+			return user;
+	}
 	return nullptr;
 }
 
-User* TriviaServer::getUserBySocket(SOCKET)
+User* TriviaServer::getUserBySocket(SOCKET sock)
 {
-	return nullptr;
+	auto it = _connectedUsers.find(sock);
+
+	if (it == _connectedUsers.end())
+		return nullptr;
+
+	return it->second;
 }
 
-Room* TriviaServer::getRoomByld(int)
+Room* TriviaServer::getRoomByld(int id)
 {
-	return nullptr;
+	auto it = _rooms.find(id);
+
+	if (it == _rooms.end())
+		return nullptr;
+
+	return it->second;
 }
 
