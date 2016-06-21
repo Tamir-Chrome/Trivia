@@ -40,8 +40,16 @@ TriviaServer::~TriviaServer()
 
 void TriviaServer::bindAndListen()
 {
-	socketAssist::bindServer();
-	socketAssist::listenClient();
+	try
+	{
+		socketAssist::bindAndListen();
+	}
+	catch (exception e)
+	{
+		TRACE("%s", e.what());
+		socketAssist::shutdown();
+	}
+		
 }
 
 void TriviaServer::serve()
