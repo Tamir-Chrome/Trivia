@@ -1,101 +1,63 @@
 #include "socketAssist.h"
-#define PORT "8820"
-#define GOOD 1
-#define BAD 0
-
-
+#include "Helper.h"
+#define PORT 8820
+#define IFACE NULL
 
 //link with Ws2_32.lib
 #pragma comment (lib, "Ws2_32.lib")
 
-//static variables defined in compilition
-WSADATA socketAssist::wsaData;
-struct addrinfo *socketAssist::result = nullptr;
-struct addrinfo socketAssist::hints;
-SOCKET socketAssist::ListenSocket = INVALID_SOCKET;
+//static variables defined in compilitionf
+SOCKET socketAssist::_socket;
+WSADATA wsaData;
 
 void socketAssist::initWinsock()
 {
-
-	// Initialize Winsock
 	int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
 	if (iResult != 0) {
-		//printf("WSAStartup failed with error: %d\n", iResult);
-		//exit(1);
-		
-	}
-
-	ZeroMemory(&hints, sizeof(hints));
-	hints.ai_family = AF_INET;
-	hints.ai_socktype = SOCK_STREAM;
-	hints.ai_protocol = IPPROTO_TCP;
-	hints.ai_flags = AI_PASSIVE;
-
-	// Resolve the server address and port
-	iResult = getaddrinfo(NULL, PORT, &hints, &result);
-	if (iResult != 0) {
-		//printf("getaddrinfo failed with error: %d\n", iResult);
-		WSACleanup();
-
-		//exit(1);
+		printf("WSAStartup failed with error: %d\n", iResult);
+		throw exception("WSAStartup failed");
 	}
 }
 
 void socketAssist::createSocket()
 {
-	// Create a SOCKET for connecting to server
-	ListenSocket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
-	if (ListenSocket == INVALID_SOCKET) {
-		printf("socket failed with error: %ld\n", WSAGetLastError());
-		freeaddrinfo(result);
+
+	// notice that we step out to the global namespace
+	// for the resolution of the function socket
+	_socket = ::socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if (_socket == INVALID_SOCKET)
+	{
 		WSACleanup();
-		exit(1);
+		throw std::exception(__FUNCTION__ " - socket");
 	}
 }
 
-void socketAssist::bindServer()
+// listen to connecting requests from clients
+void socketAssist::bindAndListen()
 {
-	// Setup the TCP listening socket
-	int iResult = bind(ListenSocket, result->ai_addr, (int)result->ai_addrlen);
-	if (iResult == SOCKET_ERROR) {
-		printf("bind failed with error: %d\n", WSAGetLastError());
-		freeaddrinfo(result);
-		closesocket(ListenSocket);
-		WSACleanup();
-		exit(1);
-	}
+	struct sockaddr_in sa = { 0 };
+	sa.sin_port = htons(PORT);
+	sa.sin_family = AF_INET;
+	sa.sin_addr.s_addr = IFACE;
+	// again stepping out to the global namespace
+	if (::bind(_socket, (struct sockaddr*)&sa, sizeof(sa)) == SOCKET_ERROR)
+		throw std::exception(__FUNCTION__ " - bind");
 
-	freeaddrinfo(result);
+	if (::listen(_socket, SOMAXCONN) == SOCKET_ERROR)
+		throw std::exception(__FUNCTION__ " - listen");
 }
 
-int socketAssist::listenClient()
+int socketAssist::acceptClient()
 {
-	int iResult = listen(ListenSocket, SOMAXCONN);
-	if (iResult == SOCKET_ERROR) {
-		printf("listen failed with error: %d\n", WSAGetLastError());
-		closesocket(ListenSocket);
-		WSACleanup();
-		exit(1);
-	}
-	return GOOD;
+	SOCKET client_socket = ::accept(_socket, NULL, NULL);
+	if (client_socket == INVALID_SOCKET)
+		throw std::exception(__FUNCTION__);
+
+	return client_socket;
 }
 
-SOCKET socketAssist::acceptClient()
+void socketAssist::shutdown()
 {
-	// Accept a client socket
-	SOCKET ClientSocket = accept(ListenSocket, NULL, NULL);
-	if (ClientSocket == INVALID_SOCKET) {
-		printf("accept failed with error: %d\n", WSAGetLastError());
-		closesocket(ListenSocket);
-		WSACleanup();
-		return BAD;
-	}
-	return ClientSocket;
-}
-
-
-
-int socketAssist::shutdown()
-{
-	return 0;
+	::closesocket(_socket);
+	WSACleanup();
 }
