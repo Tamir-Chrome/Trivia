@@ -40,16 +40,8 @@ TriviaServer::~TriviaServer()
 
 void TriviaServer::bindAndListen()
 {
-	try
-	{
-		socketAssist::bindAndListen();
-	}
-	catch (exception e)
-	{
-		TRACE("%s", e.what());
-		socketAssist::shutdown();
-	}
-		
+	socketAssist::bindServer();
+	socketAssist::listenClient();
 }
 
 void TriviaServer::serve()
@@ -437,6 +429,7 @@ void TriviaServer::handleStartGame(RecievedMessage* msg)
 	{
 		Room* room = msg->getUser()->getRoom();
 		Game* g = new Game(room->getUsers(), room->getQuestionsNo(), _db);
+
 
 		auto it = _rooms.find(room->getId());
 		_rooms.erase(it);

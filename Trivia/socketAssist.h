@@ -1,17 +1,33 @@
 #pragma once
 
-#include <WinSock2.h>
-#include <Windows.h>
+#include <winSock2.h>
+#include <windows.h>
+#include <ws2tcpip.h>
+#include <iostream>
+
+
+
 
 class socketAssist
 {
 public:
+
+
 	static void initWinsock();
 	static void createSocket();
-	static void bindAndListen();
-	static int acceptClient();
-	static void shutdown();
+	static void bindServer();
+	static int listenClient();
+	static SOCKET acceptClient();
+	static int recvData(SOCKET ClientSocket);
+	static int sendData(SOCKET ClientSocket);
+	static int shutdown();
 
 private:
-	static SOCKET _socket;
+	//static variables
+	static WSADATA wsaData;
+
+	static struct addrinfo *result;
+	static struct addrinfo hints;
+	static SOCKET ListenSocket;
 };
+
