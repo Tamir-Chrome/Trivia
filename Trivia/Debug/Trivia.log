@@ -1,26 +1,7 @@
-<<<<<<< HEAD
-﻿Build started 18/06/2016 23:21:17.
+﻿Build started 23/06/2016 15:43:08.
      1>Project "C:\Users\tamir\Documents\Visual Studio 2013\Projects\trivia\Trivia\Trivia.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt TriviaServer.cpp
-         TriviaServer.cpp
-     1>c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\triviaserver.cpp(574): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\tamir\documents\visual studio 2013\projects\trivia\trivia\triviaserver.cpp(585): warning C4018: '<' : signed/unsigned mismatch
-       Link:
+     1>Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\tamir\Documents\Visual Studio 2013\Projects\trivia\Debug\Trivia.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\tamir\Documents\Visual Studio 2013\Projects\trivia\Debug\Trivia.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\tamir\Documents\Visual Studio 2013\Projects\trivia\Debug\Trivia.lib" /MACHINE:X86 Debug\DataBase.obj
-=======
-﻿Build started 6/21/2016 1:33:29 PM.
-     1>Project "C:\Users\User\Documents\Visual Studio 2013\Projects\trivia\Trivia\Trivia.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt TriviaServer.cpp socketAssist.cpp
-         socketAssist.cpp
-         TriviaServer.cpp
-     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.cpp(582): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.cpp(593): warning C4018: '<' : signed/unsigned mismatch
-         Generating Code...
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\User\Documents\Visual Studio 2013\Projects\trivia\Debug\Trivia.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\User\Documents\Visual Studio 2013\Projects\trivia\Debug\Trivia.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\User\Documents\Visual Studio 2013\Projects\trivia\Debug\Trivia.lib" /MACHINE:X86 Debug\DataBase.obj
->>>>>>> origin/master
          Debug\Game.obj
          Debug\Helper.obj
          Debug\Question.obj
@@ -32,18 +13,12 @@
          Debug\TriviaServer.obj
          Debug\User.obj
          Debug\Validator.obj
-<<<<<<< HEAD
-         Trivia.vcxproj -> C:\Users\tamir\Documents\Visual Studio 2013\Projects\trivia\Debug\Trivia.exe
-     1>Done Building Project "C:\Users\tamir\Documents\Visual Studio 2013\Projects\trivia\Trivia\Trivia.vcxproj" (Build target(s)).
+     1>TriviaServer.obj : error LNK2019: unresolved external symbol "public: static void __cdecl socketAssist::bindAndListen(void)" (?bindAndListen@socketAssist@@SAXXZ) referenced in function "private: void __thiscall TriviaServer::bindAndListen(void)" (?bindAndListen@TriviaServer@@AAEXXZ)
+     1>TriviaServer.obj : error LNK2019: unresolved external symbol "public: static int __cdecl socketAssist::acceptClient(void)" (?acceptClient@socketAssist@@SAHXZ) referenced in function "private: void __thiscall TriviaServer::accept(void)" (?accept@TriviaServer@@AAEXXZ)
+     1>TriviaServer.obj : error LNK2019: unresolved external symbol "public: static void __cdecl socketAssist::shutdown(void)" (?shutdown@socketAssist@@SAXXZ) referenced in function "public: __thiscall TriviaServer::~TriviaServer(void)" (??1TriviaServer@@QAE@XZ)
+     1>C:\Users\tamir\Documents\Visual Studio 2013\Projects\trivia\Debug\Trivia.exe : fatal error LNK1120: 3 unresolved externals
+     1>Done Building Project "C:\Users\tamir\Documents\Visual Studio 2013\Projects\trivia\Trivia\Trivia.vcxproj" (Build target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:01.09
-=======
-         Trivia.vcxproj -> C:\Users\User\Documents\Visual Studio 2013\Projects\trivia\Debug\Trivia.exe
-     1>Done Building Project "C:\Users\User\Documents\Visual Studio 2013\Projects\trivia\Trivia\Trivia.vcxproj" (Build target(s)).
-
-Build succeeded.
-
-Time Elapsed 00:00:03.68
->>>>>>> origin/master
+Time Elapsed 00:00:00.33
