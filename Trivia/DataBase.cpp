@@ -165,17 +165,18 @@ vector<Question*> DataBase::initQuestions(int questionsNo)
 	return questions;
 }
 
-/*waypoint 3
+
 vector<string> DataBase::getBestScores()
 {
-
+	return vector<string>();
 }
 
 vector<string> DataBase::getPersonalStatus(string)
 {
-	
+	return vector<string>();
 }
-*/ 
+
+
 int DataBase::insertNewGame()
 {
 	int rc;

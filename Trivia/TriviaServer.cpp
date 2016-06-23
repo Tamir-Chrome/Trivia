@@ -615,6 +615,18 @@ void TriviaServer::handleGetRooms(RecievedMessage* msg)
 	user->send(sendMsg);
 }
 
+void TriviaServer::handleGetBestScores(RecievedMessage* msg)
+{
+	
+}
+
+void TriviaServer::handleGetPersonalStatus(RecievedMessage* msg)
+{
+	//_db.getPersonalStatus(msg->getUser()->getUsername());
+
+
+}
+
 User* TriviaServer::getUserByName(string name)
 {
 	for (auto it = _connectedUsers.begin(); it != _connectedUsers.end(); ++it)

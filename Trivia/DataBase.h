@@ -20,8 +20,8 @@ public:
 	bool addNewUser(string name, string pass, string email);
 	bool isUserAndPassMatch(string username, string password);
 	vector<Question*> initQuestions(int questionsNo);
-//	vector<string> getBestScores();
-//	vector<string> getPersonalStatus(string);
+	vector<string> getBestScores();
+	vector<string> getPersonalStatus(string);
 	int insertNewGame();
 	bool updateGameStatus(int game_id);
 	bool addAnswerToPIayer(int gameId, string username, int questionId, string answer, bool isCorrect, int answerTime);
