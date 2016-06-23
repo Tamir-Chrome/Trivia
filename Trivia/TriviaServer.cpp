@@ -438,7 +438,6 @@ void TriviaServer::handleStartGame(RecievedMessage* msg)
 		Room* room = msg->getUser()->getRoom();
 		Game* g = new Game(room->getUsers(), room->getQuestionsNo(), _db);
 
-
 		auto it = _rooms.find(room->getId());
 		_rooms.erase(it);
 

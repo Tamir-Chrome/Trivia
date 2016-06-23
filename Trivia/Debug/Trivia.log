@@ -1,17 +1,21 @@
-﻿Build started 6/23/2016 3:41:26 PM.
+﻿Build started 6/23/2016 3:59:57 PM.
      1>Project "C:\Users\User\Documents\Visual Studio 2013\Projects\trivia\Trivia\Trivia.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt DataBase.cpp Game.cpp RecievedMessage.cpp Room.cpp Source.cpp TriviaServer.cpp User.cpp socketAssist.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt DataBase.cpp Game.cpp Helper.cpp Question.cpp RecievedMessage.cpp Room.cpp Source.cpp TriviaServer.cpp User.cpp Validator.cpp socketAssist.cpp
          socketAssist.cpp
+         Validator.cpp
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\validator.cpp(17): warning C4018: '<' : signed/unsigned mismatch
          User.cpp
          TriviaServer.cpp
-     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.cpp(582): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.cpp(593): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.cpp(581): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\triviaserver.cpp(592): warning C4018: '<' : signed/unsigned mismatch
          Source.cpp
          Room.cpp
      1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\room.cpp(50): warning C4018: '<' : signed/unsigned mismatch
      1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\room.cpp(75): warning C4018: '<' : signed/unsigned mismatch
          RecievedMessage.cpp
+         Question.cpp
+         Helper.cpp
          Game.cpp
      1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\game.cpp(20): warning C4018: '<' : signed/unsigned mismatch
      1>c:\users\user\documents\visual studio 2013\projects\trivia\trivia\game.cpp(24): warning C4018: '<' : signed/unsigned mismatch
@@ -40,10 +44,9 @@
          Debug\TriviaServer.obj
          Debug\User.obj
          Debug\Validator.obj
-         LINK : C:\Users\User\Documents\Visual Studio 2013\Projects\trivia\Debug\Trivia.exe not found or not built by the last incremental link; performing full link
          Trivia.vcxproj -> C:\Users\User\Documents\Visual Studio 2013\Projects\trivia\Debug\Trivia.exe
      1>Done Building Project "C:\Users\User\Documents\Visual Studio 2013\Projects\trivia\Trivia\Trivia.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:13.81
+Time Elapsed 00:00:14.99
