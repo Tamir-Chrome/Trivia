@@ -10,6 +10,6 @@
 #define START_GAME 217
 #define CLIENT_ANSWER 219
 #define LEAVE_GAME 222
-#define BEST_SCORE_REQ 223
-#define OWN_SITUATION 225
+#define BEST_SCORE 223
+#define MY_STATUS 225
 #define EXIT 299

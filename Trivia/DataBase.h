@@ -27,13 +27,15 @@ public:
 	bool addAnswerToPIayer(int gameId, string username, int questionId, string answer, bool isCorrect, int answerTime);
 	
 private:
-	//TODO: add db callbacks functions
+
 	sqlite3* _db;
+	
 	/*
+	static int callbackPersonalStatus(void* notUsed, int argc, char** argv, char** azCol);
 	static int callbackCount(void* notUsed, int argc, char** argv, char** azCol);
 	static int callbackQuestions(void* notUsed, int argc, char** argv, char** azCol);
 	static int callbackBestScores(void* notUsed, int argc, char** argv, char** azCol);
-	static int callbackPersonalStatus(void* notUsed, int argc, char** argv, char** azCol);
+	
 	*/
 };
 

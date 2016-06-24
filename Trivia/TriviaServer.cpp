@@ -189,6 +189,10 @@ void TriviaServer::handleRecievedMessages()
 				handleLeaveGame(msg);
 				break;
 
+			case MY_STATUS:
+				handleGetPersonalStatus(msg);
+				break;
+
 			default:
 				TRACE("EXIT")
 				safeDeleteUser(msg);
@@ -621,8 +625,33 @@ void TriviaServer::handleGetBestScores(RecievedMessage* msg)
 
 void TriviaServer::handleGetPersonalStatus(RecievedMessage* msg)
 {
-	//_db.getPersonalStatus(msg->getUser()->getUsername());
+	vector<string> values = _db.getPersonalStatus(msg->getUser()->getUsername());
 
+	string sendMsg = "126";
+
+	//if no games, fill with 0
+	if (atoi(values[0].c_str()) == 0)
+		sendMsg += string(20, '0');
+	else
+	{
+		sendMsg += Helper::padder(values[0], 4);
+		sendMsg += Helper::padder(values[1], 6);
+		sendMsg += Helper::padder(values[2], 6);
+
+		int dotPos = values[3].find(".");
+		string whole = values[3].substr(0, dotPos);
+		string decimal = values[3].substr(dotPos + 1);
+
+		if (whole.size() == 1)
+			whole = "0" + whole;
+		if (decimal.size() == 1)
+			decimal += "0";
+
+		sendMsg += whole + decimal;
+	}
+
+	msg->getUser()->send(sendMsg);
+	
 
 }
 

@@ -6,6 +6,12 @@
 
 using namespace std;
 
+//byteNum - number of bytes in protocol
+string Helper::padder(string str, int byteNum)
+{
+	return string(byteNum - str.size(), '0') + str;
+}
+
 // recieves the type code of the message from socket (first byte)
 // and returns the code. if no message found in the socket returns 0 (which means the client disconnected)
 int Helper::getMessageTypeCode(SOCKET sc)
