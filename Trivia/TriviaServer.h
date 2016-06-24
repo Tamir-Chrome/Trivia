@@ -53,8 +53,8 @@ private:
 	void handleGetUsersInRoom(RecievedMessage*);
 	void handleGetRooms(RecievedMessage*);
 
-	//void handleGetBestScores(RecievedMessage*);
-	//void handleGetPersonalStatus(RecievedMessage*);
+	void handleGetBestScores(RecievedMessage*);
+	void handleGetPersonalStatus(RecievedMessage*);
 
 	void handleRecievedMessages();
 	void addRecievedMessage(RecievedMessage*);
