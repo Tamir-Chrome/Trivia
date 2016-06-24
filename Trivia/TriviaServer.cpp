@@ -22,7 +22,7 @@ TriviaServer::TriviaServer()
 		system("PAUSE");
 		exit(1);
 	}
-	
+
 }
 
 
@@ -32,7 +32,7 @@ TriviaServer::~TriviaServer()
 	_connectedUsers.clear();
 
 	////delete recevied messages
-	while (!_queRcvMessages.empty()) 
+	while (!_queRcvMessages.empty())
 		_queRcvMessages.pop();
 
 	socketAssist::shutdown();
@@ -40,8 +40,16 @@ TriviaServer::~TriviaServer()
 
 void TriviaServer::bindAndListen()
 {
-	socketAssist::bindServer();
-	socketAssist::listenClient();
+	try
+	{
+		socketAssist::bindAndListen();
+	}
+	catch (exception e)
+	{
+		TRACE("%s", e.what());
+		socketAssist::shutdown();
+	}
+
 }
 
 void TriviaServer::serve()
@@ -55,7 +63,7 @@ void TriviaServer::serve()
 		while (true)
 		{
 			TRACE("accepting client...")
-			accept();
+				accept();
 		}
 	}
 	catch (exception e)
@@ -69,7 +77,7 @@ void TriviaServer::accept()
 {
 	SOCKET client = socketAssist::acceptClient();	//wait for client
 	TRACE("Client accepted. Client socket = %d", (int)client)
-	thread clientT(&TriviaServer::clientHandler, this, client);	//open new thread for new client
+		thread clientT(&TriviaServer::clientHandler, this, client);	//open new thread for new client
 	clientT.detach();
 }
 
@@ -141,7 +149,7 @@ void TriviaServer::handleRecievedMessages()
 				useless_flag = handleSignup(msg);
 				if (useless_flag)
 					TRACE("SEND: User signed up successfuly: username = %s, socket = %d", msg->getValues()[0].c_str(), sock)
-				break;
+					break;
 
 			case GET_ROOMS:
 				handleGetRooms(msg);
@@ -181,9 +189,13 @@ void TriviaServer::handleRecievedMessages()
 				handleLeaveGame(msg);
 				break;
 
+			case MY_STATUS:
+				handleGetPersonalStatus(msg);
+				break;
+
 			default:
 				TRACE("EXIT")
-				safeDeleteUser(msg);
+					safeDeleteUser(msg);
 				break;
 			}
 
@@ -212,7 +224,7 @@ void TriviaServer::safeDeleteUser(RecievedMessage* msg)
 	{
 		TRACE("safeDeleteUser: %s", e.what());
 	}
-	
+
 }
 
 RecievedMessage* TriviaServer::buildRecieveMessage(SOCKET client, int code)
@@ -221,9 +233,9 @@ RecievedMessage* TriviaServer::buildRecieveMessage(SOCKET client, int code)
 	int numBytesPass;
 	int numBytesEmail;
 	string s;
-	string userName="";
-	string pass="";
-	string email="";
+	string userName = "";
+	string pass = "";
+	string email = "";
 	vector<string> v;
 	RecievedMessage* recM;
 	if (code == SIGN_IN)
@@ -250,7 +262,7 @@ RecievedMessage* TriviaServer::buildRecieveMessage(SOCKET client, int code)
 		//get username
 		userName = Helper::getStringPartFromSocket(client, numBytesUser);
 		v.push_back(userName);
-		
+
 		//get password size
 		numBytesPass = Helper::getIntPartFromSocket(client, 2);
 
@@ -339,7 +351,7 @@ User* TriviaServer::handleSignin(RecievedMessage* msg)
 	User* newUser = new User(username, msg->getSock());
 	_connectedUsers.insert(pair<SOCKET, User*>(msg->getSock(), newUser)); //insert new user to connected users
 	TRACE("Adding new user to connected users list: socket = %d, username = %s\n", msg->getSock(), username.c_str());
-	
+
 	Helper::sendData(msg->getSock(), "1020");
 	TRACE("Message sent to user: %s, msg: %d", username.c_str(), msg->getSock());
 
@@ -356,21 +368,21 @@ bool TriviaServer::handleSignup(RecievedMessage* msg)
 	if (Validator::isPasswordValid(password) == false)
 	{
 		TRACE("SEND: User signup failed. Invalid password: username = %s, socket = %d", username.c_str(), msg->getSock())
-		Helper::sendData(msg->getSock(), "1041");
+			Helper::sendData(msg->getSock(), "1041");
 		return false;
 	}
 
 	if (Validator::isUsernameValid(username) == false)
 	{
 		TRACE("SEND: User signup failed. Invalid username: username = %s, socket = %d", username.c_str(), msg->getSock())
-		Helper::sendData(msg->getSock(), "1043");
+			Helper::sendData(msg->getSock(), "1043");
 		return false;
 	}
 
 	if (_db.isUserExists(username))
 	{
 		TRACE("SEND: User signup failed. User already exist: username = %s, socket = %d", username.c_str(), msg->getSock())
-		Helper::sendData(msg->getSock(), "1042");
+			Helper::sendData(msg->getSock(), "1042");
 		return false;
 	}
 
@@ -430,7 +442,6 @@ void TriviaServer::handleStartGame(RecievedMessage* msg)
 		Room* room = msg->getUser()->getRoom();
 		Game* g = new Game(room->getUsers(), room->getQuestionsNo(), _db);
 
-
 		auto it = _rooms.find(room->getId());
 		_rooms.erase(it);
 
@@ -454,27 +465,27 @@ bool TriviaServer::handleCreateRoom(RecievedMessage* msg)
 
 	int maxUsers, questionsNo, questionTime;
 	vector<string> values = msg->getValues();
-	
+
 	string roomName = values[0];
 	maxUsers = atoi(values[1].c_str());
 	questionsNo = atoi(values[2].c_str());
 	questionTime = atoi(values[3].c_str());
 
 
-	int roomId=-1;
+	int roomId = -1;
 	//lock scope
 	{
 		lock_guard<mutex> lock(_mtxRoomId);
 		roomId = _roomIdSequence;
 		_roomIdSequence++;
 	}
-	
+
 	bool isCreated = user->createRoom(roomId, roomName, maxUsers, questionsNo, questionTime);
 	if (!isCreated) //room did not create
 		return false;
 
 	_rooms.insert(pair<int, Room*>(roomId, user->getRoom()));
-	
+
 
 	return true; //created room
 }
@@ -492,8 +503,8 @@ bool TriviaServer::handleCloseRoom(RecievedMessage* msg)
 	int roomId = user->closeRoom();
 	if (roomId == -1) //if failed
 		return false;
-	
-	
+
+
 	auto it = _rooms.find(roomId);
 	_rooms.erase(it);
 
@@ -520,7 +531,7 @@ bool TriviaServer::handleJoinRoom(RecievedMessage* msg)
 		return false;
 
 	return true;
-	
+
 }
 
 bool TriviaServer::handleLeaveRoom(RecievedMessage* msg)
@@ -528,8 +539,8 @@ bool TriviaServer::handleLeaveRoom(RecievedMessage* msg)
 	User* user = msg->getUser();
 	if (!user) //if no user
 		return false;
-	
-	
+
+
 	Room* room = user->getRoom();
 	if (!room) // no room
 		return false;
@@ -591,7 +602,7 @@ void TriviaServer::handleGetRooms(RecievedMessage* msg)
 
 			//add size of the room's name
 			string roomNameSize = to_string(roomName.size());
-			
+
 			if (roomName.size() < 10)
 				sendMsg += '0';
 
@@ -609,12 +620,37 @@ void TriviaServer::handleGetRooms(RecievedMessage* msg)
 
 void TriviaServer::handleGetBestScores(RecievedMessage* msg)
 {
-	
+
 }
 
 void TriviaServer::handleGetPersonalStatus(RecievedMessage* msg)
 {
-	//_db.getPersonalStatus(msg->getUser()->getUsername());
+	vector<string> values = _db.getPersonalStatus(msg->getUser()->getUsername());
+
+	string sendMsg = "126";
+
+	//if no games, fill with 0
+	if (atoi(values[0].c_str()) == 0)
+		sendMsg += string(20, '0');
+	else
+	{
+		sendMsg += Helper::padder(values[0], 4);
+		sendMsg += Helper::padder(values[1], 6);
+		sendMsg += Helper::padder(values[2], 6);
+
+		int dotPos = values[3].find(".");
+		string whole = values[3].substr(0, dotPos);
+		string decimal = values[3].substr(dotPos + 1);
+
+		if (whole.size() == 1)
+			whole = "0" + whole;
+		if (decimal.size() == 1)
+			decimal += "0";
+
+		sendMsg += whole + decimal;
+	}
+
+	msg->getUser()->send(sendMsg);
 
 
 }
@@ -649,4 +685,3 @@ Room* TriviaServer::getRoomByld(int id)
 
 	return it->second;
 }
-

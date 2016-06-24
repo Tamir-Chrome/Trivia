@@ -1,14 +1,16 @@
 #include "DataBase.h"
 #include <sstream>
+#include <string>
 #include "Helper.h"
 
 vector<string> results;
-
+string result;
 
 void sqliteErr(char *zErrMsg)
 {
 	TRACE("SQL error: %s", zErrMsg);
 	sqlite3_free(zErrMsg);
+	
 }
 
 
@@ -44,6 +46,13 @@ int getResults(void* notUsed, int argc, char** argv, char** azCol)
 	return 0;
 }
 
+
+int getResult(void* notUsed, int argc, char** argv, char** azCol)
+{
+	result = argv[0];
+
+	return 0;
+}
 
 
 bool DataBase::isUserExists(string username)
@@ -166,15 +175,91 @@ vector<Question*> DataBase::initQuestions(int questionsNo)
 }
 
 
-vector<string> DataBase::getBestScores()
+const vector<string> DataBase::getBestScores()
 {
-	return vector<string>();
+	int rc;
+	char *zErrMsg = 0;
+	stringstream s;
+
+	s << "SELECT username, MAX(score) as maxScore from(SELECT username, COUNT(*) as score FROM t_players_answers where is_correct == 1 group by game_id) group by username ORDER BY maxScore DESC LIMIT 3";
+	rc = sqlite3_exec(_db, s.str().c_str(), getResults, 0, &zErrMsg);
+	if (rc != SQLITE_OK)
+	{
+		sqliteErr(zErrMsg);
+		throw(exception(__FUNCTION__ " - number of games"));
+	}
+
+	vector<string> values(results);
+	results.clear();
+
+	return values;
 }
 
-vector<string> DataBase::getPersonalStatus(string)
+vector<string> DataBase::getPersonalStatus(string username)
 {
-	return vector<string>();
+	vector<string> values;
+
+	int rc;
+	char *zErrMsg = 0;
+	stringstream s;
+	
+	//number of games
+	s << "select COUNT(*) from(select * from(select game_id from t_players_answers where username == '" << username << "') group by game_id)";
+	rc = sqlite3_exec(_db, s.str().c_str(), getResult, 0, &zErrMsg);
+	if (rc != SQLITE_OK)
+	{
+		sqliteErr(zErrMsg);
+		throw(exception(__FUNCTION__ " - number of games"));
+	}
+
+	values.push_back(result);
+	if (atoi(result.c_str()) == 0)
+		return values;
+
+	s.str("");
+	s << "select COUNT(*) from(select game_id from t_players_answers where username == '" << username << "')";
+	rc = sqlite3_exec(_db, s.str().c_str(), getResult, 0, &zErrMsg);
+	if (rc != SQLITE_OK)
+	{
+		sqliteErr(zErrMsg);
+		throw(exception(__FUNCTION__ " - number of answers"));
+	}
+	
+
+	int numberOfanswers = atoi(result.c_str());
+
+	s.str("");
+	s << "select COUNT(*) from (select game_id from t_players_answers where username == '" << username << "' and is_correct == 1)";
+	rc = sqlite3_exec(_db, s.str().c_str(), getResult, 0, &zErrMsg);
+	if (rc != SQLITE_OK)
+	{
+		sqliteErr(zErrMsg);
+		throw(exception(__FUNCTION__ " - correct answers"));
+	}
+
+	//add number of right answers
+	values.push_back(result);
+
+	int correctAnswers = atoi(result.c_str());
+
+	int wrongAnswers = numberOfanswers - correctAnswers;
+
+	values.push_back(to_string(wrongAnswers));
+
+	s.str("");
+	s << "select AVG(answer_time) from (select answer_time from t_players_answers where username == '" << username << "')";
+	rc = sqlite3_exec(_db, s.str().c_str(), getResult, 0, &zErrMsg);
+	if (rc != SQLITE_OK)
+	{
+		sqliteErr(zErrMsg);
+		throw(exception(__FUNCTION__ " - avg time"));
+	}
+
+	values.push_back(result);
+
+	return values;
 }
+
 
 
 int DataBase::insertNewGame()
