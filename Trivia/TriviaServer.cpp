@@ -378,6 +378,12 @@ void TriviaServer::handleLeaveGame(RecievedMessage* msg)
 	}
 }
 
+void TriviaServer::handleGetBestScores(RecievedMessage* msg)
+{
+	string sendMsg = "124";
+
+}
+
 void TriviaServer::handleStartGame(RecievedMessage* msg)
 {
 	try
