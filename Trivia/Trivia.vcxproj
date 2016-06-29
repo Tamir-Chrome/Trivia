@@ -64,6 +64,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Crypto.cpp" />
     <ClCompile Include="DataBase.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Helper.cpp" />
@@ -78,6 +79,7 @@
     <ClCompile Include="Validator.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Crypto.h" />
     <ClInclude Include="DataBase.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Helper.h" />

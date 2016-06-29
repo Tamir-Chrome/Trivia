@@ -486,6 +486,7 @@ bool TriviaServer::handleCreateRoom(RecievedMessage* msg)
 
 	_rooms.insert(pair<int, Room*>(roomId, user->getRoom()));
 
+	TRACE("Room was created: roomId=%d, roomName=%s, adminName=%s, playersNo=%d, QuestionsNo=%d, AnswerTime=%d", roomId, roomName.c_str(), user->getUsername().c_str(), maxUsers, questionsNo, questionTime);
 
 	return true; //created room
 }
@@ -504,9 +505,10 @@ bool TriviaServer::handleCloseRoom(RecievedMessage* msg)
 	if (roomId == -1) //if failed
 		return false;
 
-
+	//clear from room list
 	auto it = _rooms.find(roomId);
 	_rooms.erase(it);
+
 
 	return true;
 }

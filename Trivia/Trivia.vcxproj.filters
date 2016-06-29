@@ -13,6 +13,7 @@
     <ClCompile Include="TriviaServer.cpp" />
     <ClCompile Include="User.cpp" />
     <ClCompile Include="Validator.cpp" />
+    <ClCompile Include="Crypto.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataBase.h" />
@@ -27,5 +28,6 @@
     <ClInclude Include="User.h" />
     <ClInclude Include="Validator.h" />
     <ClInclude Include="Helper.h" />
+    <ClInclude Include="Crypto.h" />
   </ItemGroup>
 </Project>
