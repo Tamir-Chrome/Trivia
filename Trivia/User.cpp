@@ -35,20 +35,20 @@ void User::setGame(Game* gm)
 
 void User::clearRoom()
 {
-	_currGame = NULL;
+	_currRoom = nullptr;
 }
 
 bool User::createRoom(int roomId, string roomName, int maxUsers, int questionsNo, int questionTime)
 {
 	if (_currRoom != NULL)
 	{
-		Helper::sendData(_sock, "1140");
+		send("1141");
 		return false;
 	}
 	else
 	{
 		_currRoom = new Room(roomId, this, roomName, maxUsers, questionsNo, questionTime);
-		Helper::sendData(_sock, "1141");
+		send("1140");
 		return true;
 	}
 }
@@ -61,6 +61,7 @@ bool User::joinRoom(Room* newRoom)
 	}
 	else
 	{
+		_currRoom = newRoom;
 		return newRoom->joinRoom(this);
 	}
 }
@@ -89,6 +90,7 @@ int User::closeRoom()
 			delete _currRoom;
 			_currRoom = NULL;
 		}
+		return roomId;
 	}
 }
 

@@ -13,7 +13,7 @@ class Helper
 {
 public:
 
-	 
+	static string padder(string str, int padSize);
 	 
 	 static int getMessageTypeCode(SOCKET sc);
 	 static char* getPartFromSocket(SOCKET sc, int bytesNum, int flags);
@@ -21,6 +21,7 @@ public:
 	 static string getStringPartFromSocket(SOCKET sc, int bytesNum);
 	 static void sendData(SOCKET sc, std::string message);
 	 static string getPaddedNumber(int num, int digits);
+
 
 private:
 	static char* Helper::getPartFromSocket(SOCKET sc, int bytesNum);
