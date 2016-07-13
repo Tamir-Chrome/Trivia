@@ -490,6 +490,7 @@ bool TriviaServer::handleCreateRoom(RecievedMessage* msg)
 
 	_rooms.insert(pair<int, Room*>(roomId, user->getRoom()));
 
+	TRACE("Room was created: roomId=%d, roomName=%s, adminName=%s, playersNo=%d, QuestionsNo=%d, AnswerTime=%d", roomId, roomName.c_str(), user->getUsername().c_str(), maxUsers, questionsNo, questionTime);
 
 	return true; //created room
 }
@@ -510,9 +511,10 @@ bool TriviaServer::handleCloseRoom(RecievedMessage* msg)
 	if (roomId == -1) //if failed
 		return false;
 
-
+	//clear from room list
 	auto it = _rooms.find(roomId);
 	_rooms.erase(it);
+
 
 	return true;
 }
@@ -635,7 +637,7 @@ void TriviaServer::handleGetBestScores(RecievedMessage* msg)
 		sendMsg += values[i];
 		sendMsg += Helper::padder(values[i+1], 6);
 	}
-	for (int i = 0; i < 3 - values.size(); i+=2)
+	for (int i = 0; i < 3 - (values.size()/2); i+=2)
 		sendMsg += "00";
 	msg->getUser()->send(sendMsg);
 }
@@ -657,14 +659,15 @@ void TriviaServer::handleGetPersonalStatus(RecievedMessage* msg)
 
 		int dotPos = values[3].find(".");
 		string whole = values[3].substr(0, dotPos);
-		string decimal = values[3].substr(dotPos + 1);
+		string decimal = values[3].substr(dotPos + 1, 2);
 
 		if (whole.size() == 1)
 			whole = "0" + whole;
 		if (decimal.size() == 1)
 			decimal += "0";
+		
 
-		sendMsg += whole + decimal;
+		sendMsg += whole + decimal[0] + decimal[1];
 	}
 
 	msg->getUser()->send(sendMsg);

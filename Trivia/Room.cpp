@@ -75,6 +75,8 @@ int Room::closeRoom(User* user)
 	for (int i = 1; i < _users.size(); i++)
 		_users[i]->clearRoom();
 
+	TRACE("Room was closed: roomId=%d, roomName=%s, closingUser=%s", _id, _name.c_str(), user->getUsername().c_str());
+
 	return _id;
 }
 
@@ -141,11 +143,18 @@ void Room::sendMessage(User* excludeUser, string message)
 {
 	try
 	{
+		int numMsgs = 0; //number of users that got the message
+		string sendList; //users that got the message
 		for each (User* user in _users)
 		{
 			if (user != excludeUser)
+			{
 				user->send(message);
+				sendList += "[" + user->getUsername() + "]";
+				numMsgs++;
+			}
 		}
+		TRACE("SEND: Room sending message to %d users (%s): message = %s", numMsgs, sendList.c_str(), message.c_str());
 		
 	}
 	catch (exception e)

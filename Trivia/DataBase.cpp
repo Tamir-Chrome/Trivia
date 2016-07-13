@@ -171,6 +171,7 @@ vector<Question*> DataBase::initQuestions(int questionsNo)
 		Question* q = new Question(id, results[offset+1], results[offset+2], results[offset+3], results[offset+4], results[offset+5]);
 		questions.push_back(q);
 	}
+	results.clear();
 	return questions;
 }
 

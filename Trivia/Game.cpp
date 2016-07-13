@@ -135,7 +135,7 @@ bool Game::handleAnswerFromUser(User* user, int answerNo, int time)
 
 	string send = "120";
 
-	send += (flag) ? "1" : "0";
+	send += (flag) ? "1" : "0"; 
 	
 	Helper::sendData(user->getScoket(), send);
 	return handleNextTurn();

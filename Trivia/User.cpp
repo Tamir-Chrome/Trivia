@@ -20,6 +20,7 @@ User::~User()
 void User::send(string message)
 {
 	Helper::sendData(_sock, message);
+	TRACE("Message sent to user: %s, msg: %s", _username.c_str(), message.c_str());
 }
 
 
