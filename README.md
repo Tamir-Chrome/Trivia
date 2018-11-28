@@ -2,7 +2,7 @@
 Multi Threaded Server of A Dynamic Trivia Game
 
 
-Ever wanted a custom made multi threaded C++ with multi client/room support that uses simple SQL ?
+Ever wanted a custom made multi threaded C++ server with multi client/room support that uses simple SQL ?
 
 Maybe try this one
 
@@ -10,5 +10,6 @@ Maybe try this one
 
 And in braille:
 
-⠠⠑⠧⠑⠗ ⠺⠁⠝⠞⠑⠙ ⠁ ⠉⠥⠎⠞⠕⠍ ⠍⠁⠙⠑ ⠠⠍⠥⠇⠞⠊ ⠠⠞⠓⠗⠑⠁⠙⠑⠙ ⠠⠉⠠⠏⠠⠏ ⠺⠊⠞⠓ ⠍⠥⠇⠞⠊ ⠉⠇⠊⠑⠝⠞⠸⠌⠗⠕⠕⠍ ⠎⠥⠏⠏⠕⠗⠞ ⠞⠓⠁⠞ ⠥⠎⠑⠎ ⠎⠊⠍⠏⠇⠑ ⠎⠟⠇ ⠦
-⠍⠁⠽⠃⠑ ⠞⠗⠽ ⠞⠓⠊⠎ ⠕⠝⠑
+⠠⠑⠧⠑⠗ ⠺⠁⠝⠞⠑⠙ ⠁ ⠉⠥⠎⠞⠕⠍ ⠍⠁⠙⠑ ⠍⠥⠇⠞⠊ ⠞⠓⠗⠑⠁⠙⠑⠙ ⠠⠉⠠⠏⠠⠏ ⠎⠑⠗⠧⠑⠗ ⠺⠊⠞⠓ ⠍⠥⠇⠞⠊ ⠉⠇⠊⠑⠝⠞⠸⠌⠗⠕⠕⠍ ⠎⠥⠏⠏⠕⠗⠞ ⠞⠓⠁⠞ ⠥⠎⠑⠎ ⠎⠊⠍⠏⠇⠑ ⠠⠎⠠⠟⠠⠇ ⠦
+
+⠠⠍⠁⠽⠃⠑ ⠞⠗⠽ ⠞⠓⠊⠎ ⠕⠝⠑
